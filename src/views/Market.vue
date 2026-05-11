@@ -1,29 +1,32 @@
 <template>
-  <div class="pt-20">
+  <div class="relative">
     <Navbar />
     
-    <main class="max-w-7xl mx-auto px-6 py-12">
-      <!-- Hero Section -->
-      <section class="flex flex-col items-center text-center mb-24 relative overflow-hidden py-12">
-        <!-- Background Glow -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
+    <main class="max-w-7xl mx-auto px-6">
+      <!-- Hero Container -->
+      <div class="relative overflow-hidden mb-24 pt-40">
+        <!-- Background Vertical Glow -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-full bg-primary/10 blur-[100px] pointer-events-none rounded-[100%]"></div>
         
-        <h1 class="font-display-lg text-5xl md:text-6xl text-on-surface mb-8 relative z-10 leading-tight font-bold tracking-tight">
-          获取您的<span class="text-primary-container drop-shadow-[0_0_15px_rgba(0,229,255,0.6)]">数字资产</span>
-        </h1>
-        <p class="text-lg text-on-surface-variant mb-12 max-w-2xl relative z-10">
-          高效率、加密、即时获取。探索高能效虚拟资源库，加速您的数字架构建设。
-        </p>
-        
-        <div class="flex gap-6 relative z-10">
-          <button class="bg-primary-container text-on-primary font-bold py-3 px-8 rounded btn-glow transition-all duration-300 flex items-center gap-2">
-            立即探索
-            <ArrowRight class="w-5 h-5" />
-          </button>
-        </div>
-      </section>
+        <section class="flex flex-col items-center text-center relative z-10 pb-20">
+          <h1 class="font-display-lg text-5xl md:text-6xl text-on-surface mb-8 leading-tight font-bold tracking-tight">
+            获取您的<span class="text-primary-container drop-shadow-[0_0_15px_rgba(0,229,255,0.6)]">数字资产</span>
+          </h1>
+          <p class="text-lg text-on-surface-variant mb-12 max-w-2xl">
+            高效率、加密、即时获取。探索高能效虚拟资源库，加速您的数字架构建设。
+          </p>
+          
+          <div class="flex gap-6">
+            <button @click="$router.push('/assets')" class="bg-primary-container text-on-primary font-bold py-3 px-8 rounded btn-glow transition-all duration-300 flex items-center gap-2">
+              立即探索
+              <ArrowRight class="w-5 h-5" />
+            </button>
+          </div>
+        </section>
 
-      <div class="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent mb-24"></div>
+        <!-- Divider Line at the exact bottom boundary -->
+        <div class="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent absolute bottom-0 left-0 z-10"></div>
+      </div>
 
       <!-- Resource Grid Section -->
       <section class="pb-24">
