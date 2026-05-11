@@ -17,7 +17,7 @@
           </p>
           
           <div class="flex gap-6">
-            <button @click="$router.push('/assets')" class="bg-primary-container text-on-primary font-bold py-3 px-8 rounded btn-glow transition-all duration-300 flex items-center gap-2">
+            <button @click="$router.push('/all-assets')" class="bg-primary-container text-on-primary font-bold py-3 px-8 rounded btn-glow transition-all duration-300 flex items-center gap-2">
               立即探索
               <ArrowRight class="w-5 h-5" />
             </button>
@@ -38,7 +38,7 @@
             </h2>
             <p class="text-on-surface-variant">实时高价值资产注入，探索本周热门数字序列</p>
           </div>
-          <router-link to="/assets" class="text-primary hover:text-primary-fixed font-bold text-sm transition-colors flex items-center gap-1 group">
+          <router-link to="/all-assets" class="text-primary hover:text-primary-fixed font-bold text-sm transition-colors flex items-center gap-1 group">
             查看全部
             <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </router-link>
@@ -85,7 +85,7 @@
 
         <!-- View All Button -->
         <div class="mt-16 flex justify-center">
-          <button @click="$router.push('/assets')" class="glass-panel px-8 py-4 rounded-xl flex items-center gap-3 text-on-surface hover:text-primary hover:border-primary/50 transition-all duration-300 font-bold group">
+          <button @click="$router.push('/all-assets')" class="glass-panel px-8 py-4 rounded-xl flex items-center gap-3 text-on-surface hover:text-primary hover:border-primary/50 transition-all duration-300 font-bold group">
             探索完整资产库
             <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform text-primary" />
           </button>

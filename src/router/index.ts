@@ -11,7 +11,7 @@ const routes = [
   { path: '/market', component: Market },
   { path: '/details/:id', component: Details },
   { path: '/profile', component: Profile },
-  { path: '/assets', component: AllAssets },
+  { path: '/all-assets', component: AllAssets },
 ];
 
 const router = createRouter({

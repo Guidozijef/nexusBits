@@ -56,7 +56,7 @@ import { store } from '../store';
 
 const navLinks = [
   { name: '首页推荐', path: '/market' },
-  { name: '资产库', path: '/assets' },
+  { name: '资产库', path: '/all-assets' },
   { name: '我的资产', path: '/profile' }
 ];
 </script>
