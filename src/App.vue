@@ -14,8 +14,14 @@
         <component :is="Component" />
       </transition>
     </router-view>
+
+    <Cart />
   </div>
 </template>
+
+<script setup lang="ts">
+import Cart from './components/Cart.vue';
+</script>
 
 <style>
 .cyber-grid {
@@ -23,6 +29,10 @@
     linear-gradient(to right, rgba(0, 229, 255, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+button, a {
+  cursor: pointer;
 }
 
 .fade-enter-active,

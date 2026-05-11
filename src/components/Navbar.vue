@@ -36,8 +36,11 @@
           />
           <Search class="absolute right-2 w-4 h-4 text-on-surface-variant cursor-pointer hover:text-primary transition-colors" />
         </div>
-        <button class="p-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-full transition-all">
+        <button @click="store.isCartOpen = true" class="relative p-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-full transition-all">
           <ShoppingCart class="w-5 h-5" />
+          <span v-if="store.cart.length > 0" class="absolute top-0 right-0 w-4 h-4 bg-primary text-surface text-[10px] font-bold rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(0,229,255,0.5)]">
+            {{ store.cart.length }}
+          </span>
         </button>
         <router-link to="/profile" class="p-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-full transition-all">
           <User class="w-5 h-5" />
@@ -49,11 +52,11 @@
 
 <script setup lang="ts">
 import { Search, ShoppingCart, User } from 'lucide-vue-next';
+import { store } from '../store';
 
 const navLinks = [
-  { name: '市场', path: '/market' },
-  { name: '资产', path: '#' },
-  { name: '金库', path: '#' },
-  { name: '节点', path: '#' },
+  { name: '首页推荐', path: '/market' },
+  { name: '资产库', path: '/assets' },
+  { name: '我的资产', path: '/profile' }
 ];
 </script>

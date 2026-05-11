@@ -75,11 +75,11 @@
 
       <!-- Social Login -->
       <div class="flex gap-4">
-        <button class="flex-1 flex items-center justify-center gap-2 py-3 bg-surface-container/50 border border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container rounded transition-all duration-300 group">
+        <button @click.prevent="handleLogin" class="flex-1 flex items-center justify-center gap-2 py-3 bg-surface-container/50 border border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container rounded transition-all duration-300 group">
           <Github class="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
           <span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface">Github</span>
         </button>
-        <button class="flex-1 flex items-center justify-center gap-2 py-3 bg-surface-container/50 border border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container rounded transition-all duration-300 group">
+        <button @click.prevent="handleLogin" class="flex-1 flex items-center justify-center gap-2 py-3 bg-surface-container/50 border border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container rounded transition-all duration-300 group">
           <Chrome class="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
           <span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface">Google</span>
         </button>
@@ -88,7 +88,7 @@
       <!-- Registration Link -->
       <div class="text-center">
         <p class="text-sm text-on-surface-variant">还没有账号？ 
-          <a href="#" class="text-primary hover:text-primary-fixed font-semibold transition-colors ml-1">立即注册</a>
+          <a href="#" @click.prevent="handleLogin" class="text-primary hover:text-primary-fixed font-semibold transition-colors ml-1">立即注册</a>
         </p>
       </div>
     </div>

@@ -16,7 +16,7 @@
       </nav>
 
       <div class="text-xs opacity-60">
-        © 2024 NexusBits Protocol. 保留所有权利。
+        © 2026 NexusBits Protocol. 保留所有权利。
       </div>
     </div>
   </footer>
