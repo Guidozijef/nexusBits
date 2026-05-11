@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  --color-surface-container-low: #1a1c1f;
+  --color-secondary-container: #7000ff;
+  --color-on-primary-container: #00626e;
+  --color-error: #ffb4ab;
+  --color-surface-container-lowest: #0c0e12;
+  --color-on-error-container: #ffdad6;
+  --color-background: #111317;
+  --color-outline-variant: #3b494c;
+  --color-primary-fixed-dim: #00daf3;
+  --color-tertiary-fixed: #e5e1e4;
+  --color-on-surface-variant: #bac9cc;
+  --color-on-secondary-fixed-variant: #5700c9;
+  --color-secondary-fixed-dim: #d1bcff;
+  --color-outline: #849396;
+  --color-tertiary-container: #d2cfd2;
+  --color-error-container: #93000a;
+  --color-primary-container: #00e5ff;
+  --color-surface-container: #1e2023;
+  --color-on-surface: #e2e2e7;
+  --color-on-secondary: #3c0090;
+  --color-on-background: #e2e2e7;
+  --color-inverse-surface: #e2e2e7;
+  --color-surface-container-highest: #333539;
+  --color-secondary-fixed: #e9ddff;
+  --color-on-tertiary-fixed-variant: #474649;
+  --color-on-tertiary-fixed: #1c1b1d;
+  --color-on-primary-fixed-variant: #004f58;
+  --color-surface-container-high: #282a2e;
+  --color-on-tertiary: #313032;
+  --color-on-secondary-fixed: #23005b;
+  --color-on-secondary-container: #ddcdff;
+  --color-tertiary: #efebee;
+  --color-surface-dim: #111317;
+  --color-tertiary-fixed-dim: #c8c6c8;
+  --color-surface-tint: #00daf3;
+  --color-on-tertiary-container: #59585b;
+  --color-primary-fixed: #9cf0ff;
+  --color-on-primary: #00363d;
+  --color-inverse-on-surface: #2e3034;
+  --color-on-primary-fixed: #001f24;
+  --color-inverse-primary: #006875;
+  --color-secondary: #d1bcff;
+  --color-primary: #c3f5ff;
+  --color-surface: #111317;
+  --color-surface-bright: #37393d;
+  --color-surface-variant: #333539;
+  --color-on-error: #690005;
+}
+
+body {
+  @apply bg-background text-on-background font-sans;
+}
