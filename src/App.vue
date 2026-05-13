@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-surface-container-lowest text-on-surface cyber-grid relative overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+  <div class="min-h-screen bg-surface-container-lowest text-on-surface cyber-grid relative overflow-clip selection:bg-primary-container selection:text-on-primary-container">
     <!-- Ambient Glow Background -->
     <div class="absolute inset-0 pointer-events-none">
       <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] mix-blend-screen"></div>

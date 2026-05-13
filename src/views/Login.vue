@@ -12,7 +12,7 @@
       <form @submit.prevent="handleSubmit" class="flex flex-col gap-6">
         <!-- Display Name (Register Only) -->
         <div v-if="isRegisterMode" class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-on-surface/60" for="displayName">显示名称</label>
+          <label class="text-sm font-medium text-on-surface/60" for="displayName">昵称</label>
           <div class="relative">
             <User class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant w-5 h-5" />
             <input 
@@ -25,16 +25,16 @@
           </div>
         </div>
 
-        <!-- Email Input -->
+        <!-- Account/Email Input -->
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-on-surface/60" for="account">邮箱</label>
+          <label class="text-sm font-medium text-on-surface/60" for="account">{{ isRegisterMode ? '邮箱' : '邮箱 / 昵称' }}</label>
           <div class="relative">
             <Mail class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant w-5 h-5" />
             <input 
               id="account"
               v-model="form.email"
-              type="email" 
-              placeholder="输入您的邮箱"
+              :type="isRegisterMode ? 'email' : 'text'" 
+              :placeholder="isRegisterMode ? '输入您的邮箱' : '输入您的邮箱或昵称'"
               class="w-full bg-surface-container/80 border border-outline-variant/50 rounded py-3 pl-10 pr-4 text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-transparent input-glow transition-all duration-300"
             />
           </div>
@@ -42,7 +42,7 @@
 
         <!-- Password Input -->
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-on-surface/60" for="password">访问密钥</label>
+          <label class="text-sm font-medium text-on-surface/60" for="password">密码</label>
           <div class="relative">
             <Lock class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant w-5 h-5" />
             <input 
@@ -145,7 +145,7 @@ const handleSubmit = async () => {
   errorMsg.value = '';
 
   if (!form.email || !form.password) {
-    errorMsg.value = '请填写邮箱和密码';
+    errorMsg.value = isRegisterMode.value ? '请填写邮箱和密码' : '请填写账号和密码';
     return;
   }
 

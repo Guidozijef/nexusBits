@@ -3,8 +3,8 @@
     <Navbar />
     <main class="max-w-7xl mx-auto px-6 py-12 flex flex-col lg:flex-row gap-8">
       <!-- Left Sidebar: Filters -->
-      <aside class="w-full lg:w-1/4 shrink-0 flex flex-col gap-6">
-        <div class="category-panel glass-panel p-6 rounded-2xl flex flex-col h-full max-h-[calc(100vh-8rem)] sticky top-28">
+      <aside class="w-full lg:w-1/4 shrink-0 flex flex-col gap-6 sticky top-24 self-start z-10">
+        <div class="category-panel glass-panel p-6 rounded-2xl flex flex-col max-h-[calc(100vh-8rem)] w-full">
           <h3 class="text-lg font-bold text-on-surface mb-6 flex items-center gap-2 border-b border-outline-variant/30 pb-4">
             <Layers class="w-5 h-5 text-primary" /> 资产分类
           </h3>
@@ -169,9 +169,5 @@ onUnmounted(() => { if (observer) observer.disconnect(); });
 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.2); border-radius: 4px; }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.5); }
 
-.category-panel {
-  position:sticky;
-  top:100px
 
-}
 </style>
