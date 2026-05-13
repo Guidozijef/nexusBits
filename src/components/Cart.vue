@@ -29,12 +29,12 @@
         </div>
 
         <div v-else v-for="item in store.cart" :key="item.id" class="glass-panel p-4 rounded-xl flex gap-4 items-center group relative overflow-hidden">
-          <img :src="item.image" class="w-16 h-16 rounded object-cover border border-outline-variant/30" />
-          <div class="flex-1">
-            <h4 class="font-bold text-on-surface text-sm truncate pr-6">{{ item.name }}</h4>
-            <div class="text-primary font-mono text-sm mt-1">{{ item.price }} NX</div>
+          <img :src="item.product?.image_url || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80'" class="w-16 h-16 rounded object-cover border border-outline-variant/30" />
+          <div class="flex-1 min-w-0">
+            <h4 class="font-bold text-on-surface text-sm truncate pr-6">{{ item.product?.name }}</h4>
+            <div class="text-primary font-mono text-sm mt-1">{{ item.product?.price }} NB</div>
           </div>
-          <button @click="store.removeFromCart(item.id)" class="text-on-surface-variant hover:text-error transition-colors p-2">
+          <button @click="store.removeFromCart(item.product_id)" class="text-on-surface-variant hover:text-error transition-colors p-2">
             <Trash2 class="w-4 h-4" />
           </button>
         </div>
@@ -44,18 +44,20 @@
       <div v-if="store.cart.length > 0" class="p-6 border-t border-outline-variant/30 bg-surface-container/30">
         <div class="flex justify-between items-center mb-6">
           <span class="text-on-surface-variant">总计</span>
-          <span class="text-2xl font-bold text-primary font-mono">{{ store.cartTotal }} NX</span>
+          <span class="text-2xl font-bold text-primary font-mono">{{ store.cartTotal }} NB</span>
         </div>
         
         <button 
           @click="handleCheckout"
-          class="w-full py-4 bg-primary text-surface font-bold text-lg rounded-xl btn-glow transition-all duration-300 flex items-center justify-center gap-2"
+          :disabled="checkoutLoading"
+          class="w-full py-4 bg-primary text-surface font-bold text-lg rounded-xl btn-glow transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
         >
-          <CreditCard class="w-5 h-5" />
+          <Loader2 v-if="checkoutLoading" class="w-5 h-5 animate-spin" />
+          <CreditCard v-else class="w-5 h-5" />
           立即结算
         </button>
         
-        <p v-if="checkoutError" class="text-error text-xs text-center mt-3 animate-pulse">余额不足，请先充值！</p>
+        <p v-if="checkoutError" class="text-error text-xs text-center mt-3 animate-pulse">{{ checkoutError }}</p>
         <p v-if="checkoutSuccess" class="text-primary text-xs text-center mt-3 animate-pulse">支付成功！已添加至您的仓库。</p>
       </div>
     </div>
@@ -64,28 +66,33 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ShoppingCart, X, Trash2, CreditCard } from 'lucide-vue-next';
+import { ShoppingCart, X, Trash2, CreditCard, Loader2 } from 'lucide-vue-next';
 import { store } from '../store';
 
-const checkoutError = ref(false);
+const checkoutError = ref('');
 const checkoutSuccess = ref(false);
+const checkoutLoading = ref(false);
 
-const handleCheckout = () => {
-  checkoutError.value = false;
+const handleCheckout = async () => {
+  checkoutError.value = '';
   checkoutSuccess.value = false;
+  checkoutLoading.value = true;
   
-  if (store.checkout()) {
-    checkoutSuccess.value = true;
-    setTimeout(() => {
-      checkoutSuccess.value = false;
-      store.isCartOpen = false;
-    }, 2000);
-  } else {
-    checkoutError.value = true;
-    setTimeout(() => {
-      checkoutError.value = false;
-    }, 3000);
+  try {
+    const res = await store.checkout();
+    if (res.success) {
+      checkoutSuccess.value = true;
+      setTimeout(() => {
+        checkoutSuccess.value = false;
+        store.isCartOpen = false;
+      }, 2000);
+    } else {
+      checkoutError.value = res.error || '结算失败';
+    }
+  } catch (e: any) {
+    checkoutError.value = e.message || '结算发生错误';
   }
+  checkoutLoading.value = false;
 };
 </script>
 

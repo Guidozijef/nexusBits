@@ -28,14 +28,15 @@
 
       <!-- Trailing Icons -->
       <div class="flex items-center gap-4">
-        <div class="hidden sm:flex relative items-center">
+        <form @submit.prevent="handleSearch" class="hidden sm:flex relative items-center">
           <input 
             type="text" 
+            v-model="searchQuery"
             placeholder="搜索资产..."
             class="bg-surface-container/50 border-b border-outline-variant/50 focus:border-primary focus:ring-0 text-on-surface text-sm py-1 px-3 outline-none w-48 transition-all duration-300 placeholder-on-surface-variant/50"
           />
-          <Search class="absolute right-2 w-4 h-4 text-on-surface-variant cursor-pointer hover:text-primary transition-colors" />
-        </div>
+          <Search @click="handleSearch" class="absolute right-2 w-4 h-4 text-on-surface-variant cursor-pointer hover:text-primary transition-colors" />
+        </form>
         <button @click="store.isCartOpen = true" class="relative p-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-full transition-all">
           <ShoppingCart class="w-5 h-5" />
           <span v-if="store.cart.length > 0" class="absolute top-0 right-0 w-4 h-4 bg-primary text-surface text-[10px] font-bold rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(0,229,255,0.5)]">
@@ -51,8 +52,20 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { Search, ShoppingCart, User } from 'lucide-vue-next';
 import { store } from '../store';
+
+const router = useRouter();
+const searchQuery = ref('');
+
+const handleSearch = () => {
+  router.push({
+    path: '/all-assets',
+    query: { search: searchQuery.value || undefined }
+  });
+};
 
 const navLinks = [
   { name: '首页推荐', path: '/market' },

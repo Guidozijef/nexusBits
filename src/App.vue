@@ -20,7 +20,13 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import Cart from './components/Cart.vue';
+import { store } from './store';
+
+onMounted(() => {
+  store.initSession();
+});
 </script>
 
 <style>
