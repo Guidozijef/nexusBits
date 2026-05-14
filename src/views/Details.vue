@@ -89,44 +89,48 @@
 
             <!-- 1. Type Selection -->
             <div class="flex flex-col gap-4">
-              <div class="flex items-center gap-2 border-l-4 border-primary pl-3">
-                <h3 class="text-lg font-bold text-on-surface tracking-wide">类型</h3>
-              </div>
-              <div class="flex flex-wrap gap-3">
-                <button v-for="t in types" :key="t" 
-                  @click="selectedType = t"
-                  class="px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 border"
-                  :class="selectedType === t ? 'bg-primary text-surface-container-lowest border-primary shadow-[0_0_15px_rgba(0,229,255,0.3)]' : 'bg-surface-container/30 text-on-surface-variant border-outline-variant/30 hover:border-primary/50 hover:text-on-surface hover:bg-surface-container/80'"
-                >
-                  {{ t }}
-                </button>
+              <!-- Type Selection -->
+              <div v-if="product.types && product.types.length > 0" class="flex flex-col gap-3">
+                <div class="flex items-center gap-2 border-l-4 border-primary pl-3">
+                  <h3 class="text-lg font-bold text-on-surface tracking-wide">类型</h3>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button v-for="(type, idx) in product.types" :key="idx"
+                    @click="selectedType = idx"
+                    class="px-4 py-2 rounded-full border transition-all duration-300 text-sm font-medium"
+                    :class="selectedType === idx ? 'bg-primary/20 border-primary text-primary shadow-[0_0_15px_rgba(0,229,255,0.2)]' : 'border-outline-variant/30 text-on-surface-variant hover:border-primary/50'">
+                    {{ type }}
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- 2. Package Selection -->
             <div class="flex flex-col gap-4">
-              <div class="flex items-center gap-2 border-l-4 border-primary pl-3">
-                <h3 class="text-lg font-bold text-on-surface tracking-wide">套餐</h3>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div v-for="pkg in packages" :key="pkg.id"
+              <!-- Package Selection -->
+              <div v-if="product.packages && product.packages.length > 0" class="flex flex-col gap-3">
+                <div class="flex items-center gap-2 border-l-4 border-primary pl-3">
+                  <h3 class="text-lg font-bold text-on-surface tracking-wide">套餐</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div v-for="pkg in product.packages" :key="pkg.id"
                   @click="selectedPackage = pkg"
                   class="glass-panel p-6 rounded-xl flex flex-col gap-4 cursor-pointer transition-all duration-300 relative border-2 overflow-hidden"
-                  :class="selectedPackage.id === pkg.id ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(0,229,255,0.25)] scale-[1.02]' : 'border-outline-variant/20 hover:border-primary/40'"
+                  :class="selectedPackage?.id === pkg.id ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(0,229,255,0.25)] scale-[1.02]' : 'border-outline-variant/20 hover:border-primary/40'"
                 >
                   <!-- Decorative Selected Corner -->
-                  <div v-if="selectedPackage.id === pkg.id" class="absolute -top-4 -right-4 w-16 h-16 bg-primary/20 blur-xl pointer-events-none transition-all"></div>
-                  <div v-if="selectedPackage.id === pkg.id" class="absolute top-0 right-0 bg-primary rounded-bl-xl w-8 h-8 flex items-center justify-center shadow-md transition-all">
+                  <div v-if="selectedPackage?.id === pkg.id" class="absolute -top-4 -right-4 w-16 h-16 bg-primary/20 blur-xl pointer-events-none transition-all"></div>
+                  <div v-if="selectedPackage?.id === pkg.id" class="absolute top-0 right-0 bg-primary rounded-bl-xl w-8 h-8 flex items-center justify-center shadow-md transition-all">
                     <Check class="w-5 h-5 text-surface-container-lowest" stroke-width="3" />
                   </div>
 
                   <div v-if="pkg.recommended" class="absolute top-0 left-0 bg-gradient-to-r from-primary to-[#00b0ff] text-surface-container-lowest text-[10px] font-bold px-3 py-1 rounded-br-xl rounded-tl-xl shadow-[0_2px_10px_rgba(0,229,255,0.4)] z-10">
-                    {{ product.tag }} 推荐
+                    推荐
                   </div>
                   <div class="text-center pb-4 border-b border-outline-variant/20">
                     <h4 class="text-base font-bold text-on-surface">{{ pkg.name }}</h4>
                     <div class="text-3xl font-bold text-primary mt-3 flex items-baseline justify-center gap-1">
-                      <span class="text-lg">¥</span>{{ pkg.price }}<span class="text-xs text-on-surface-variant font-normal">起</span>
+                      <span class="text-lg">¥</span>{{ pkg.price }}
                     </div>
                   </div>
                   <ul class="flex flex-col gap-3 text-xs text-on-surface-variant pt-2">
@@ -138,23 +142,26 @@
                     </li>
                   </ul>
                 </div>
+                </div>
               </div>
             </div>
 
             <!-- 3. Duration Selection -->
             <div class="flex flex-col gap-4">
-              <div class="flex items-center gap-2 border-l-4 border-primary pl-3">
-                <h3 class="text-lg font-bold text-on-surface tracking-wide">时长</h3>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div v-for="dur in durations" :key="dur.id"
+              <!-- Duration Selection -->
+              <div v-if="product.durations && product.durations.length > 0" class="flex flex-col gap-3">
+                <div class="flex items-center gap-2 border-l-4 border-primary pl-3">
+                  <h3 class="text-lg font-bold text-on-surface tracking-wide">时长</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div v-for="dur in product.durations" :key="dur.id"
                   @click="selectedDuration = dur"
                   class="glass-panel p-4 rounded-xl flex flex-col justify-center cursor-pointer transition-all duration-300 relative border-2 min-h-[80px] overflow-hidden"
-                  :class="selectedDuration.id === dur.id ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(0,229,255,0.25)] scale-[1.02]' : 'border-outline-variant/20 hover:border-primary/40'"
+                  :class="selectedDuration?.id === dur.id ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(0,229,255,0.25)] scale-[1.02]' : 'border-outline-variant/20 hover:border-primary/40'"
                 >
                   <!-- Decorative Selected Corner -->
-                  <div v-if="selectedDuration.id === dur.id" class="absolute -top-4 -right-4 w-12 h-12 bg-primary/20 blur-xl pointer-events-none transition-all"></div>
-                  <div v-if="selectedDuration.id === dur.id" class="absolute top-0 right-0 bg-primary rounded-bl-xl w-7 h-7 flex items-center justify-center shadow-md transition-all">
+                  <div v-if="selectedDuration?.id === dur.id" class="absolute -top-4 -right-4 w-12 h-12 bg-primary/20 blur-xl pointer-events-none transition-all"></div>
+                  <div v-if="selectedDuration?.id === dur.id" class="absolute top-0 right-0 bg-primary rounded-bl-xl w-7 h-7 flex items-center justify-center shadow-md transition-all">
                     <Check class="w-4 h-4 text-surface-container-lowest" stroke-width="3" />
                   </div>
 
@@ -163,8 +170,9 @@
                   </div>
                   <div class="flex justify-between items-center w-full gap-2">
                     <span class="text-sm font-medium text-on-surface leading-tight">{{ dur.name }}</span>
-                    <span class="text-base font-bold text-primary shrink-0">¥ {{ selectedPackage.price + dur.priceMod }}</span>
+                    <span class="text-base font-bold text-primary shrink-0">¥ {{ (selectedPackage?.price || 0) + (dur.price_modifier || 0) }}</span>
                   </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -214,23 +222,15 @@
               <!-- Price Breakdown -->
               <div class="flex flex-col gap-3 pb-6 border-b border-outline-variant/30 text-sm">
                 <div class="flex justify-between items-center text-on-surface-variant">
-                  <span>原价</span>
-                  <span class="line-through">¥ {{ originalPrice.toFixed(2) }}</span>
-                </div>
-                <div class="flex justify-between items-center text-secondary">
-                  <span class="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity">优惠合计 <ChevronDown class="w-3 h-3"/></span>
-                  <span>- ¥ {{ discountAmount.toFixed(2) }}</span>
-                </div>
-                <div class="flex justify-between items-center text-secondary pl-4 text-xs opacity-80">
-                  <span>商品折扣</span>
-                  <span>- ¥ {{ discountAmount.toFixed(2) }}</span>
+                  <span>总计</span>
+                  <span>¥ {{ totalPrice.toFixed(2) }}</span>
                 </div>
               </div>
 
               <!-- Final Price -->
               <div class="flex justify-between items-end pt-2">
                 <span class="text-on-surface font-bold text-base mb-1">到手价</span>
-                <span class="text-4xl font-bold text-primary animate-glow">¥ {{ finalPrice.toFixed(2) }}</span>
+                <span class="text-4xl font-bold text-primary animate-glow">¥ {{ totalPrice.toFixed(2) }}</span>
               </div>
 
               <!-- Actions -->
@@ -260,65 +260,29 @@ import { ChevronRight, Bolt, FileText, AlertTriangle, ShoppingCart, Loader2, Che
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import { store } from '../store';
-import { productsApi, ordersApi } from '../api';
+import { productsApi } from '../api';
 
 const route = useRoute();
 const router = useRouter();
 const product = ref<any>(null);
 const loading = ref(true);
 
-// --- Mocked Variant State ---
-const types = ['账号', '代充', '家庭组账号', '下载号'];
-const selectedType = ref('账号');
-
-const packages = [
-  {
-    id: 1,
-    name: '基础版',
-    price: 38,
-    features: ['仅支持免费版基础模型', '基础功能权限']
-  },
-  {
-    id: 2,
-    name: 'Pro 进阶版',
-    price: 178,
-    features: ['支持最新的 Pro 级模型', '支持全量文字与图像融合', '最多5名家庭成员共享权益'],
-    recommended: true
-  },
-  {
-    id: 3,
-    name: 'Ultra 旗舰版',
-    price: 599,
-    features: ['提供最高模型和功能限制', '抢先体验 Project Mariner', '每月 25,000 AI 算力积分']
-  }
-];
-const selectedPackage = ref(packages[1]);
-
-const durations = [
-  { id: 1, name: '12个月(优惠质保30天)', priceMod: 10 },
-  { id: 2, name: '12个月(学生优惠质保20天)', priceMod: 0, tag: '热门推荐 (80%用户选择)' },
-  { id: 3, name: '30天(全程质保)', priceMod: 21 }
-];
-const selectedDuration = ref(durations[1]);
+const selectedType = ref(0);
+const selectedPackage = ref<any>(null);
+const selectedDuration = ref<any>(null);
 
 const quantity = ref(1);
 
 const increaseQuantity = () => quantity.value++;
 const decreaseQuantity = () => { if (quantity.value > 1) quantity.value--; };
 
-// Assume a flat 46 RMB discount logic per item for demonstration
-const discountPerItem = 46;
-
-const originalPrice = computed(() => {
-  return (selectedPackage.value.price + selectedDuration.value.priceMod + discountPerItem) * quantity.value;
-});
-
-const discountAmount = computed(() => {
-  return discountPerItem * quantity.value;
-});
-
-const finalPrice = computed(() => {
-  return (selectedPackage.value.price + selectedDuration.value.priceMod) * quantity.value;
+// --- Computed Pricing ---
+const totalPrice = computed(() => {
+  if (!product.value) return 0;
+  let base = product.value.price || 0;
+  if (selectedPackage.value) base = selectedPackage.value.price;
+  if (selectedDuration.value) base += selectedDuration.value.price_modifier;
+  return base * quantity.value;
 });
 
 // --- API Calls ---
@@ -328,7 +292,12 @@ onMounted(async () => {
     const res = await productsApi.getById(id as string);
     if (res.success) {
       product.value = res.data;
-      // In a real scenario, we might initialize `packages[0].price = product.value.price`, but we use mock data.
+      if (product.value.packages && product.value.packages.length > 0) {
+        selectedPackage.value = product.value.packages.find((p: any) => p.recommended) || product.value.packages[0];
+      }
+      if (product.value.durations && product.value.durations.length > 0) {
+        selectedDuration.value = product.value.durations[0];
+      }
     }
   } catch (e) { console.error('Failed to load product:', e); }
   loading.value = false;
@@ -347,8 +316,9 @@ const handleBuyNow = () => {
     path: `/checkout/${product.value.id}`,
     query: {
       qty: quantity.value,
-      pkg: selectedPackage.value.id,
-      dur: selectedDuration.value.id
+      pkg: selectedPackage.value?.id,
+      dur: selectedDuration.value?.id,
+      type_idx: selectedType.value
     }
   });
 };

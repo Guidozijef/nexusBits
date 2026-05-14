@@ -215,33 +215,30 @@ const selectedPayment = ref('balance'); // Default to internal balance for demon
 
 // Extract query params
 const qty = ref(Number(route.query.qty) || 1);
-const pkgId = Number(route.query.pkg) || 2;
-const durId = Number(route.query.dur) || 1;
+const pkgId = Number(route.query.pkg) || 0;
+const durId = Number(route.query.dur) || 0;
+const typeIdx = Number(route.query.type_idx) || 0;
 
-// Replicate mock data mapping
-const selectedPkgName = computed(() => {
-  if (pkgId === 1) return '基础版';
-  if (pkgId === 3) return 'Ultra 旗舰版';
-  return 'Pro 进阶版';
-});
-const selectedPkgPrice = computed(() => {
-  if (pkgId === 1) return 38;
-  if (pkgId === 3) return 599;
-  return 178;
+const selectedPackage = computed(() => {
+  if (!product.value?.packages) return null;
+  return product.value.packages.find((p: any) => p.id === pkgId) || product.value.packages[0] || null;
 });
 
-const selectedDurName = computed(() => {
-  if (durId === 1) return '12个月(优惠质保30天)';
-  if (durId === 3) return '30天(全程质保)';
-  return '12个月(学生优惠质保20天)';
-});
-const selectedDurPriceMod = computed(() => {
-  if (durId === 1) return 10;
-  if (durId === 3) return 21;
-  return 0;
+const selectedDuration = computed(() => {
+  if (!product.value?.durations) return null;
+  return product.value.durations.find((d: any) => d.id === durId) || product.value.durations[0] || null;
 });
 
-const unitPrice = computed(() => selectedPkgPrice.value + selectedDurPriceMod.value);
+const selectedPkgName = computed(() => selectedPackage.value?.name || '标准配置');
+const selectedDurName = computed(() => selectedDuration.value?.name || '默认时长');
+
+const unitPrice = computed(() => {
+  if (!product.value) return 0;
+  let base = product.value.price;
+  if (selectedPackage.value) base = selectedPackage.value.price;
+  if (selectedDuration.value) base += selectedDuration.value.price_modifier;
+  return base;
+});
 const subTotal = computed(() => unitPrice.value * qty.value);
 const fee = ref(0);
 const total = computed(() => subTotal.value + fee.value);
@@ -285,7 +282,13 @@ const submitOrder = async () => {
   errorMsg.value = '';
   
   try {
-    const res = await ordersApi.directBuy(product.value.id);
+    const res = await ordersApi.directBuy(
+      product.value.id,
+      qty.value,
+      selectedPackage.value?.id,
+      selectedDuration.value?.id,
+      typeIdx
+    );
     if (res.success) {
       successMsg.value = true;
       if (res.data?.new_balance !== undefined && store.profile) {

@@ -176,8 +176,8 @@ export const ordersApi = {
   checkout() {
     return api.post('/orders');
   },
-  directBuy(product_id: number) {
-    return api.post('/orders/direct', { product_id });
+  directBuy(product_id: number, quantity?: number, pkg_id?: number, dur_id?: number, type_idx?: number) {
+    return api.post('/orders/direct', { product_id, quantity, pkg_id, dur_id, type_idx });
   },
 };
 
