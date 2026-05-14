@@ -20,17 +20,70 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <!-- Left: Options & Details -->
           <div class="lg:col-span-8 flex flex-col gap-10">
-            <!-- Cover Image -->
-            <div class="relative w-full aspect-[21/9] rounded-xl overflow-hidden glass-panel group shadow-[0_0_40px_rgba(0,229,255,0.1)]">
-              <img :src="product.image_url" :alt="product.name" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" />
-              <div class="absolute top-6 left-6 flex gap-2">
-                <span class="px-3 py-1 bg-surface/80 backdrop-blur-md border border-outline-variant/50 rounded text-xs font-bold text-on-surface">{{ product.asset_type || product.tag }}</span>
-                <span v-if="product.file_format" class="px-3 py-1 bg-primary/20 backdrop-blur-md border border-primary/30 rounded text-xs font-bold text-primary">{{ product.file_format }}</span>
+            <!-- Header Section (replaces Cover Image) -->
+            <div class="glass-panel p-6 md:p-8 rounded-2xl flex flex-col md:flex-row gap-8 items-center md:items-start relative overflow-hidden group/header">
+              <!-- Background Ambient Glow -->
+              <div class="absolute -top-24 -left-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover/header:bg-primary/20"></div>
+              
+              <!-- Product Square Image -->
+              <div class="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 shrink-0 rounded-2xl overflow-hidden border border-outline-variant/30 bg-surface-container/50 relative shadow-[0_0_25px_rgba(0,229,255,0.1)]">
+                <img :src="product.image_url" :alt="product.name" class="w-full h-full object-cover filter group-hover/header:scale-110 transition-transform duration-500" />
               </div>
-              <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-transparent pointer-events-none"></div>
-              <div class="absolute bottom-6 left-6 pr-6">
-                <h1 class="text-3xl md:text-4xl font-bold text-primary tracking-tight text-glow-primary mb-2">{{ product.name }}</h1>
-                <p class="text-on-surface-variant line-clamp-2 max-w-2xl">{{ product.description }}</p>
+              
+              <!-- Product Info & Trust Badges -->
+              <div class="flex flex-col justify-center gap-4 flex-grow w-full z-10 h-full">
+                <!-- Title & Tags -->
+                <div>
+                  <div class="flex gap-2 mb-3">
+                    <span class="px-2 py-0.5 bg-primary/10 border border-primary/30 rounded text-[10px] font-bold text-primary">{{ product.asset_type || product.tag }}</span>
+                    <span v-if="product.file_format" class="px-2 py-0.5 bg-secondary/10 border border-secondary/30 rounded text-[10px] font-bold text-secondary">{{ product.file_format }}</span>
+                  </div>
+                  <h1 class="text-2xl md:text-3xl font-bold text-on-surface tracking-tight mb-2">{{ product.name }}</h1>
+                  <p class="text-sm text-on-surface-variant line-clamp-2 max-w-xl">{{ product.description }}</p>
+                </div>
+                
+                <div class="h-px w-full bg-gradient-to-r from-outline-variant/30 to-transparent my-1"></div>
+
+                <!-- Trust Badges Row -->
+                <div class="flex flex-wrap items-center gap-6 md:gap-10">
+                  <!-- Badge 1 -->
+                  <div class="flex items-center gap-3 group/badge cursor-default">
+                    <div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/30 text-on-surface-variant group-hover/badge:border-primary/50 group-hover/badge:text-primary transition-all shadow-inner">
+                      <ShieldCheck class="w-4 h-4" />
+                    </div>
+                    <div class="flex flex-col">
+                      <span class="text-sm font-bold text-on-surface group-hover/badge:text-primary transition-colors">官方渠道</span>
+                      <span class="text-[10px] text-on-surface-variant">渠道正规可查</span>
+                    </div>
+                  </div>
+                  <!-- Badge 2 -->
+                  <div class="flex items-center gap-3 group/badge cursor-default">
+                    <div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/30 text-on-surface-variant group-hover/badge:border-primary/50 group-hover/badge:text-primary transition-all shadow-inner">
+                      <Zap class="w-4 h-4" />
+                    </div>
+                    <div class="flex flex-col">
+                      <span class="text-sm font-bold text-on-surface group-hover/badge:text-primary transition-colors">极速发货</span>
+                      <span class="text-[10px] text-on-surface-variant">付款后尽快处理</span>
+                    </div>
+                  </div>
+                  <!-- Badge 3 -->
+                  <div class="flex items-center gap-3 group/badge cursor-default">
+                    <div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/30 text-on-surface-variant group-hover/badge:border-primary/50 group-hover/badge:text-primary transition-all shadow-inner">
+                      <Headset class="w-4 h-4" />
+                    </div>
+                    <div class="flex flex-col">
+                      <span class="text-sm font-bold text-on-surface group-hover/badge:text-primary transition-colors">售后无忧</span>
+                      <span class="text-[10px] text-on-surface-variant">24小时在线服务</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Text Tags -->
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <span class="text-[10px] px-2.5 py-1 rounded border border-outline-variant/20 text-on-surface-variant bg-surface-container hover:border-primary/30 hover:text-on-surface transition-colors cursor-default">订单全程可查</span>
+                  <span class="text-[10px] px-2.5 py-1 rounded border border-outline-variant/20 text-on-surface-variant bg-surface-container hover:border-primary/30 hover:text-on-surface transition-colors cursor-default">支付状态实时同步</span>
+                  <span class="text-[10px] px-2.5 py-1 rounded border border-outline-variant/20 text-on-surface-variant bg-surface-container hover:border-primary/30 hover:text-on-surface transition-colors cursor-default">异常订单支持人工复核</span>
+                </div>
               </div>
             </div>
 
@@ -67,7 +120,7 @@
                     <Check class="w-5 h-5 text-surface-container-lowest" stroke-width="3" />
                   </div>
 
-                  <div v-if="pkg.recommended" class="absolute -top-3 left-4 bg-primary text-surface-container-lowest text-[10px] font-bold px-2 py-0.5 rounded shadow-[0_0_10px_rgba(0,229,255,0.5)]">
+                  <div v-if="pkg.recommended" class="absolute top-0 left-0 bg-gradient-to-r from-primary to-[#00b0ff] text-surface-container-lowest text-[10px] font-bold px-3 py-1 rounded-br-xl rounded-tl-xl shadow-[0_2px_10px_rgba(0,229,255,0.4)] z-10">
                     {{ product.tag }} 推荐
                   </div>
                   <div class="text-center pb-4 border-b border-outline-variant/20">
@@ -105,7 +158,7 @@
                     <Check class="w-4 h-4 text-surface-container-lowest" stroke-width="3" />
                   </div>
 
-                  <div v-if="dur.tag" class="absolute -top-3 left-4 bg-secondary text-surface-container-lowest text-[10px] font-bold px-2 py-0.5 rounded shadow-[0_0_10px_rgba(255,42,109,0.5)]">
+                  <div v-if="dur.tag" class="absolute top-0 left-0 bg-gradient-to-r from-secondary to-[#ff0055] text-surface-container-lowest text-[10px] font-bold px-3 py-1 rounded-br-xl rounded-tl-xl shadow-[0_2px_10px_rgba(255,42,109,0.4)] z-10">
                     {{ dur.tag }}
                   </div>
                   <div class="flex justify-between items-center w-full gap-2">
@@ -182,17 +235,13 @@
 
               <!-- Actions -->
               <div class="flex flex-col gap-3 mt-4">
-                <button @click="handleBuyNow" :disabled="buyLoading" class="w-full py-4 bg-primary text-surface-container-lowest font-bold text-base rounded-xl hover:bg-primary-fixed transition-all duration-300 btn-glow flex items-center justify-center gap-2">
-                  <Loader2 v-if="buyLoading" class="w-5 h-5 animate-spin" />
-                  <Bolt v-else class="w-5 h-5" /> 立即购买
+                <button @click="handleBuyNow" class="w-full py-4 bg-primary text-surface-container-lowest font-bold text-base rounded-xl hover:bg-primary-fixed transition-all duration-300 btn-glow flex items-center justify-center gap-2">
+                  <Bolt class="w-5 h-5" /> 去结算
                 </button>
                 <button @click="handleAddToCart" class="w-full py-3 bg-surface-container border border-primary/30 text-primary font-bold text-sm rounded-xl hover:bg-primary/10 transition-all duration-300 flex items-center justify-center gap-2">
                   <ShoppingCart class="w-4 h-4" /> 加入购物车
                 </button>
               </div>
-              
-              <p v-if="buyError" class="text-error text-xs text-center animate-pulse">{{ buyError }}</p>
-              <p v-else-if="buySuccess" class="text-primary text-xs text-center animate-pulse">支付成功！资源已发放至您的仓库。</p>
             </div>
           </div>
         </div>
@@ -207,7 +256,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ChevronRight, Bolt, FileText, AlertTriangle, ShoppingCart, Loader2, Check, Minus, Plus, MessageSquare, ChevronDown } from 'lucide-vue-next';
+import { ChevronRight, Bolt, FileText, AlertTriangle, ShoppingCart, Loader2, Check, Minus, Plus, MessageSquare, ChevronDown, ShieldCheck, Zap, Headset } from 'lucide-vue-next';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import { store } from '../store';
@@ -217,9 +266,6 @@ const route = useRoute();
 const router = useRouter();
 const product = ref<any>(null);
 const loading = ref(true);
-const buyError = ref('');
-const buySuccess = ref(false);
-const buyLoading = ref(false);
 
 // --- Mocked Variant State ---
 const types = ['账号', '代充', '家庭组账号', '下载号'];
@@ -294,31 +340,17 @@ const handleAddToCart = async () => {
   await store.addToCart(product.value.id); // Would pass variant IDs in a real app
 };
 
-const handleBuyNow = async () => {
+const handleBuyNow = () => {
   if (!store.isLoggedIn) { router.push('/login'); return; }
   if (!product.value) return;
-  buyError.value = '';
-  buySuccess.value = false;
-  buyLoading.value = true;
-  try {
-    // In a real app, directBuy would take quantity and variant IDs. 
-    // Here we just use the base directBuy.
-    const res = await ordersApi.directBuy(product.value.id);
-    if (res.success) {
-      buySuccess.value = true;
-      if (res.data?.new_balance !== undefined && store.profile) {
-        store.profile.balance = res.data.new_balance;
-      }
-      setTimeout(() => { buySuccess.value = false; }, 2500);
-    } else {
-      buyError.value = res.error || '支付失败';
-      setTimeout(() => { buyError.value = ''; }, 3000);
+  router.push({
+    path: `/checkout/${product.value.id}`,
+    query: {
+      qty: quantity.value,
+      pkg: selectedPackage.value.id,
+      dur: selectedDuration.value.id
     }
-  } catch (e: any) {
-    buyError.value = e.message || '支付失败';
-    setTimeout(() => { buyError.value = ''; }, 3000);
-  }
-  buyLoading.value = false;
+  });
 };
 </script>
 

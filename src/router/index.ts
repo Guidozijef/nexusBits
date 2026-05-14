@@ -4,6 +4,7 @@ import Market from '../views/Market.vue';
 import Details from '../views/Details.vue';
 import Profile from '../views/Profile.vue';
 import AllAssets from '../views/AllAssets.vue';
+import Checkout from '../views/Checkout.vue';
 import { store } from '../store';
 
 const routes = [
@@ -11,6 +12,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/market', component: Market },
   { path: '/details/:id', component: Details },
+  { path: '/checkout/:id', component: Checkout, meta: { requiresAuth: true } },
   { path: '/profile', component: Profile, meta: { requiresAuth: true } },
   { path: '/all-assets', component: AllAssets },
 ];
