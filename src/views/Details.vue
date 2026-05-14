@@ -108,12 +108,12 @@
             <!-- 2. Package Selection -->
             <div class="flex flex-col gap-4">
               <!-- Package Selection -->
-              <div v-if="product.packages && product.packages.length > 0" class="flex flex-col gap-3">
+              <div v-if="availablePackages.length > 0" class="flex flex-col gap-3">
                 <div class="flex items-center gap-2 border-l-4 border-primary pl-3">
                   <h3 class="text-lg font-bold text-on-surface tracking-wide">套餐</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div v-for="pkg in product.packages" :key="pkg.id"
+                  <div v-for="pkg in availablePackages" :key="pkg.id"
                   @click="selectedPackage = pkg"
                   class="glass-panel p-6 rounded-xl flex flex-col gap-4 cursor-pointer transition-all duration-300 relative border-2 overflow-hidden"
                   :class="selectedPackage?.id === pkg.id ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(0,229,255,0.25)] scale-[1.02]' : 'border-outline-variant/20 hover:border-primary/40'"
@@ -149,12 +149,12 @@
             <!-- 3. Duration Selection -->
             <div class="flex flex-col gap-4">
               <!-- Duration Selection -->
-              <div v-if="product.durations && product.durations.length > 0" class="flex flex-col gap-3">
+              <div v-if="availableDurations.length > 0" class="flex flex-col gap-3">
                 <div class="flex items-center gap-2 border-l-4 border-primary pl-3">
                   <h3 class="text-lg font-bold text-on-surface tracking-wide">时长</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div v-for="dur in product.durations" :key="dur.id"
+                  <div v-for="dur in availableDurations" :key="dur.id"
                   @click="selectedDuration = dur"
                   class="glass-panel p-4 rounded-xl flex flex-col justify-center cursor-pointer transition-all duration-300 relative border-2 min-h-[80px] overflow-hidden"
                   :class="selectedDuration?.id === dur.id ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(0,229,255,0.25)] scale-[1.02]' : 'border-outline-variant/20 hover:border-primary/40'"
@@ -182,8 +182,7 @@
               <h2 class="text-xl font-bold text-on-surface border-b border-outline-variant/30 pb-4 flex items-center gap-2">
                 <FileText class="w-5 h-5 text-primary" /> 资源介绍
               </h2>
-              <div class="text-on-surface-variant space-y-4 leading-relaxed text-sm">
-                <p>{{ product.long_description || product.description }}</p>
+              <div class="text-on-surface-variant leading-relaxed text-sm rich-text-content" v-html="product.long_description || product.description">
               </div>
             </div>
 
@@ -194,9 +193,14 @@
                 <AlertTriangle class="w-5 h-5" /> 注意事项
               </h2>
               <ul class="text-on-surface-variant space-y-3 leading-relaxed text-sm list-disc pl-5 relative z-10">
-                <li>此资产为数字加密虚拟商品，一经购买获取密钥后，<span class="text-error font-bold">概不退款</span>。</li>
-                <li>附带的商业授权允许您在无限制的最终商业项目中合法使用，但严禁将原始模型与代码文件直接转售或进行任何形式的重新打包分发。</li>
-                <li>如需部署至生产级主网环境，请务必确保您的宿主服务器具备足够资源支持其实时重构机制。</li>
+                <template v-if="product.notices && product.notices.length > 0">
+                  <li v-for="(notice, idx) in product.notices" :key="idx" v-html="notice"></li>
+                </template>
+                <template v-else>
+                  <li>此资产为数字加密虚拟商品，一经购买获取密钥后，<span class="text-error font-bold">概不退款</span>。</li>
+                  <li>附带的商业授权允许您在无限制的最终商业项目中合法使用，但严禁将原始模型与代码文件直接转售或进行任何形式的重新打包分发。</li>
+                  <li>如需部署至生产级主网环境，请务必确保您的宿主服务器具备足够资源支持其实时重构机制。</li>
+                </template>
               </ul>
             </div>
           </div>
@@ -254,7 +258,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ChevronRight, Bolt, FileText, AlertTriangle, ShoppingCart, Loader2, Check, Minus, Plus, MessageSquare, ChevronDown, ShieldCheck, Zap, Headset } from 'lucide-vue-next';
 import Navbar from '../components/Navbar.vue';
@@ -276,6 +280,38 @@ const quantity = ref(1);
 const increaseQuantity = () => quantity.value++;
 const decreaseQuantity = () => { if (quantity.value > 1) quantity.value--; };
 
+// --- Hierarchical Filtering ---
+const availablePackages = computed(() => {
+  if (!product.value?.packages) return [];
+  return product.value.packages.filter((p: any) => !p.type_idxs || p.type_idxs.includes(selectedType.value));
+});
+
+const availableDurations = computed(() => {
+  if (!product.value?.durations) return [];
+  return product.value.durations.filter((d: any) => !d.pkg_ids || d.pkg_ids.includes(selectedPackage.value?.id));
+});
+
+// Auto-select valid options when parent changes
+watch(selectedType, () => {
+  if (availablePackages.value.length > 0) {
+    if (!availablePackages.value.find((p: any) => p.id === selectedPackage.value?.id)) {
+      selectedPackage.value = availablePackages.value.find((p: any) => p.recommended) || availablePackages.value[0];
+    }
+  } else {
+    selectedPackage.value = null;
+  }
+});
+
+watch(selectedPackage, () => {
+  if (availableDurations.value.length > 0) {
+    if (!availableDurations.value.find((d: any) => d.id === selectedDuration.value?.id)) {
+      selectedDuration.value = availableDurations.value[0];
+    }
+  } else {
+    selectedDuration.value = null;
+  }
+});
+
 // --- Computed Pricing ---
 const totalPrice = computed(() => {
   if (!product.value) return 0;
@@ -292,11 +328,11 @@ onMounted(async () => {
     const res = await productsApi.getById(id as string);
     if (res.success) {
       product.value = res.data;
-      if (product.value.packages && product.value.packages.length > 0) {
-        selectedPackage.value = product.value.packages.find((p: any) => p.recommended) || product.value.packages[0];
+      if (availablePackages.value.length > 0) {
+        selectedPackage.value = availablePackages.value.find((p: any) => p.recommended) || availablePackages.value[0];
       }
-      if (product.value.durations && product.value.durations.length > 0) {
-        selectedDuration.value = product.value.durations[0];
+      if (availableDurations.value.length > 0) {
+        selectedDuration.value = availableDurations.value[0];
       }
     }
   } catch (e) { console.error('Failed to load product:', e); }
@@ -325,11 +361,45 @@ const handleBuyNow = () => {
 </script>
 
 <style scoped>
-@keyframes glow {
-  0%, 100% { filter: drop-shadow(0 0 2px rgba(0, 229, 255, 0.4)); }
-  50% { filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.8)); }
+.btn-glow {
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
 }
-.animate-glow { animation: glow 3s ease-in-out infinite; }
+.btn-glow:hover {
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+}
+.animate-glow {
+  text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+  animation: pulse-glow 3s infinite alternate;
+}
+@keyframes pulse-glow {
+  0% { text-shadow: 0 0 10px rgba(0, 229, 255, 0.3); }
+  100% { text-shadow: 0 0 30px rgba(0, 229, 255, 0.8); }
+}
+
+/* Rich Text Content Styles */
+.rich-text-content :deep(p) { margin-bottom: 1rem; line-height: 1.6; }
+.rich-text-content :deep(p:last-child) { margin-bottom: 0; }
+.rich-text-content :deep(img) { 
+  max-width: 100%; 
+  border-radius: 0.75rem; 
+  margin-top: 1rem; 
+  margin-bottom: 1rem; 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.rich-text-content :deep(strong), .rich-text-content :deep(b) { color: var(--on-surface); font-weight: 700; }
+.rich-text-content :deep(a) { color: #00E5FF; text-decoration: none; transition: color 0.2s; }
+.rich-text-content :deep(a:hover) { color: #80f2ff; text-decoration: underline; }
+.rich-text-content :deep(ul) { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+.rich-text-content :deep(ol) { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+.rich-text-content :deep(li) { margin-bottom: 0.25rem; }
+.rich-text-content :deep(h1), .rich-text-content :deep(h2), .rich-text-content :deep(h3), .rich-text-content :deep(h4) {
+  color: var(--on-surface);
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.rich-text-content :deep(br) { display: block; content: ""; margin-top: 0.5rem; }
 
 /* Hidden increment/decrement arrows in number input */
 input[type=number]::-webkit-inner-spin-button, 
