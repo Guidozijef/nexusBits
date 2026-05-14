@@ -115,6 +115,23 @@
         </p>
       </div>
     </div>
+
+    <!-- Success Modal -->
+    <div v-if="showSuccessModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0a0f]/80 backdrop-blur-md animate-fade-in">
+      <div class="glass-card w-full max-w-sm p-8 flex flex-col items-center text-center gap-4 animate-scale-up border border-primary/30">
+        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+          <Mail class="w-8 h-8 text-primary animate-pulse" />
+        </div>
+        <h3 class="text-xl font-bold text-on-surface">注册成功</h3>
+        <p class="text-sm text-on-surface-variant leading-relaxed">{{ successMessage }}</p>
+        <button 
+          @click="closeSuccessModal"
+          class="w-full mt-4 bg-primary text-surface-container-lowest font-bold py-3 rounded btn-glow transition-all duration-300 hover:scale-[1.02]"
+        >
+          我知道了，去登录
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -129,6 +146,13 @@ const showPassword = ref(false);
 const isRegisterMode = ref(false);
 const loading = ref(false);
 const errorMsg = ref('');
+const showSuccessModal = ref(false);
+const successMessage = ref('');
+
+const closeSuccessModal = () => {
+  showSuccessModal.value = false;
+  isRegisterMode.value = false;
+};
 
 const form = reactive({
   email: '',
@@ -162,8 +186,8 @@ const handleSubmit = async () => {
         if (store.isLoggedIn) {
           router.push('/market');
         } else {
-          alert(res.message || '注册成功！请前往您的邮箱点击验证链接，验证完成后即可登录。');
-          isRegisterMode.value = false;
+          successMessage.value = res.message || '注册成功！请前往您的邮箱点击验证链接，验证完成后即可登录。';
+          showSuccessModal.value = true;
         }
       } else {
         errorMsg.value = res.error || '注册失败';
@@ -200,5 +224,14 @@ const handleSubmit = async () => {
 
 .animate-fade-in {
   animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 </style>
