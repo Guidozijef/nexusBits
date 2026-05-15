@@ -194,7 +194,7 @@
       <div class="absolute inset-0 bg-black/70 backdrop-blur-md cursor-pointer" @click="isRechargeOpen = false"></div>
       <div class="relative glass-panel w-full max-w-md p-8 rounded-2xl border border-primary/30 shadow-[0_0_50px_rgba(0,229,255,0.15)] animate-fade-in">
         <button @click="isRechargeOpen = false" class="absolute top-4 right-4 text-on-surface-variant hover:text-primary"><X class="w-6 h-6"/></button>
-        <h2 class="text-2xl font-bold text-primary mb-2">充值金库余额</h2>
+        <h2 class="text-2xl font-bold text-primary mb-2">充值钱包余额</h2>
         <p class="text-sm text-on-surface-variant mb-6">选择充值金额，即时到账。</p>
         
         <div class="grid grid-cols-3 gap-3 mb-6">
