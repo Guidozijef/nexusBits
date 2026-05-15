@@ -180,7 +180,7 @@
             <!-- Description -->
             <div class="glass-panel p-8 rounded-2xl flex flex-col gap-6 mt-4">
               <h2 class="text-xl font-bold text-on-surface border-b border-outline-variant/30 pb-4 flex items-center gap-2">
-                <FileText class="w-5 h-5 text-primary" /> 资源介绍
+                <FileText class="w-5 h-5 text-primary" /> 商品介绍
               </h2>
               <div class="text-on-surface-variant leading-relaxed text-sm rich-text-content" v-html="product.long_description || product.description">
               </div>
@@ -197,7 +197,7 @@
                   <li v-for="(notice, idx) in product.notices" :key="idx" v-html="notice"></li>
                 </template>
                 <template v-else>
-                  <li>此资产为数字加密虚拟商品，一经购买获取密钥后，<span class="text-error font-bold">概不退款</span>。</li>
+                  <li>此商品为数字加密虚拟商品，一经购买获取密钥后，<span class="text-error font-bold">概不退款</span>。</li>
                   <li>附带的商业授权允许您在无限制的最终商业项目中合法使用，但严禁将原始模型与代码文件直接转售或进行任何形式的重新打包分发。</li>
                   <li>如需部署至生产级主网环境，请务必确保您的宿主服务器具备足够资源支持其实时重构机制。</li>
                 </template>

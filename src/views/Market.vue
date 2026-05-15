@@ -6,9 +6,9 @@
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-full bg-primary/10 blur-[100px] pointer-events-none rounded-[100%]"></div>
         <section class="flex flex-col items-center text-center relative z-10 pb-20">
           <h1 class="font-display-lg text-5xl md:text-6xl text-on-surface mb-8 leading-tight font-bold tracking-tight">
-            获取您的<span class="text-primary-container drop-shadow-[0_0_15px_rgba(0,229,255,0.6)]">数字资产</span>
+            获取您的<span class="text-primary-container drop-shadow-[0_0_15px_rgba(0,229,255,0.6)]">虚拟商品</span>
           </h1>
-          <p class="text-lg text-on-surface-variant mb-12 max-w-2xl">高效率、加密、即时获取。探索高能效虚拟资源库，加速您的数字架构建设。</p>
+          <p class="text-lg text-on-surface-variant mb-12 max-w-2xl">安全、快捷、即时获取。探索优质虚拟商品，满足您的多样化需求。</p>
           <div class="flex gap-6">
             <button @click="$router.push('/all-assets')" class="bg-primary-container text-on-primary font-bold py-3 px-8 rounded btn-glow transition-all duration-300 flex items-center gap-2">
               立即探索 <ArrowRight class="w-5 h-5" />
@@ -24,7 +24,7 @@
             <h2 class="text-3xl font-bold text-on-surface mb-2 tracking-tight flex items-center gap-2">
               <Sparkles class="w-6 h-6 text-primary" /> 前沿精选
             </h2>
-            <p class="text-on-surface-variant">实时高价值资产注入，探索本周热门数字序列</p>
+            <p class="text-on-surface-variant">精选高价值商品，探索本周热门特惠</p>
           </div>
           <router-link to="/all-assets" class="text-primary hover:text-primary-fixed font-bold text-sm transition-colors flex items-center gap-1 group">
             查看全部 <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -49,7 +49,7 @@
               <p class="text-sm text-on-surface-variant line-clamp-2 mb-6 flex-grow">{{ item.description }}</p>
               <div class="flex justify-between items-center mt-auto pt-4 border-t border-outline-variant/20">
                 <div class="flex flex-col">
-                  <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">实时估值</span>
+                  <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">价格</span>
                   <span class="text-lg font-bold text-primary-container animate-pulse">{{ item.price }} {{ item.currency || 'NB' }}</span>
                 </div>
                 <button @click.stop="handleAddToCart(item)" class="bg-surface-container border border-primary/30 text-primary hover:bg-primary/10 px-4 py-2 rounded transition-all text-sm font-bold">立即获取</button>
@@ -60,7 +60,7 @@
 
         <div class="mt-16 flex justify-center">
           <button @click="$router.push('/all-assets')" class="glass-panel px-8 py-4 rounded-xl flex items-center gap-3 text-on-surface hover:text-primary hover:border-primary/50 transition-all duration-300 font-bold group">
-            探索完整资产库 <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform text-primary" />
+            探索完整商品库 <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform text-primary" />
           </button>
         </div>
       </section>

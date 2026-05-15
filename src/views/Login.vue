@@ -4,8 +4,8 @@
       <!-- Header Section -->
       <div class="text-center">
         <h1 class="font-display-lg text-4xl text-primary tracking-tighter mb-2 animate-glow">NexusBits</h1>
-        <h2 class="text-2xl font-bold text-on-surface mb-2">{{ isRegisterMode ? '创建您的数字矩阵' : '登录您的数字矩阵' }}</h2>
-        <p class="text-on-surface-variant">探索无限虚拟资产</p>
+        <h2 class="text-2xl font-bold text-on-surface mb-2">{{ isRegisterMode ? '开启您的数字金库' : '验证您的数字金库' }}</h2>
+        <p class="text-on-surface-variant">探索无限虚拟商品</p>
       </div>
 
       <!-- Login / Register Form -->
@@ -82,7 +82,7 @@
           class="w-full bg-primary text-surface-container-lowest font-bold py-4 rounded btn-glow transition-all duration-300 mt-2 tracking-wide disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
-          {{ isRegisterMode ? '注册矩阵' : '进入矩阵' }}
+          {{ isRegisterMode ? '开启金库' : '进入金库' }}
         </button>
       </form>
 

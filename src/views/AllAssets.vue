@@ -6,7 +6,7 @@
       <aside class="w-full lg:w-1/4 shrink-0 flex flex-col gap-6 sticky top-24 self-start z-10">
         <div class="category-panel glass-panel p-6 rounded-2xl flex flex-col max-h-[calc(100vh-8rem)] w-full">
           <h3 class="text-lg font-bold text-on-surface mb-6 flex items-center gap-2 border-b border-outline-variant/30 pb-4">
-            <Layers class="w-5 h-5 text-primary" /> 资产分类
+            <Layers class="w-5 h-5 text-primary" /> 商品分类
           </h3>
           <div v-if="categoriesLoading" class="flex flex-col gap-2">
             <div v-for="i in 8" :key="i" class="h-10 bg-surface-container-highest rounded-xl animate-pulse"></div>
@@ -26,7 +26,7 @@
       <section class="w-full lg:w-3/4 pb-24">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 border-b border-outline-variant/30 pb-6">
           <div>
-            <h1 class="text-4xl font-bold text-on-surface mb-2 tracking-tight">探索资产库</h1>
+            <h1 class="text-4xl font-bold text-on-surface mb-2 tracking-tight">探索商品库</h1>
             <div class="flex items-center gap-3 text-sm">
               <span class="text-on-surface-variant">当前分类:</span>
               <span class="bg-surface-container px-2 py-1 rounded text-primary font-bold border border-primary/20">{{ activeFilter }}</span>
@@ -54,7 +54,7 @@
               <p class="text-sm text-on-surface-variant line-clamp-2 mb-6 flex-grow">{{ item.description }}</p>
               <div class="flex justify-between items-center mt-auto pt-4 border-t border-outline-variant/20">
                 <div class="flex flex-col">
-                  <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">实时估值</span>
+                  <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">价格</span>
                   <span class="text-lg font-bold text-primary-container animate-pulse">{{ item.price }} {{ item.currency || 'NB' }}</span>
                 </div>
                 <button @click.stop="handleAddToCart(item)" class="bg-surface-container border border-primary/30 text-primary hover:bg-primary/10 px-4 py-2 rounded transition-all text-sm font-bold">加入购物车</button>

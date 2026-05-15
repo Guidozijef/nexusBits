@@ -34,7 +34,7 @@
               <span class="text-primary font-bold">{{ store.balance.toFixed(2) }} NB</span>
             </div>
             <div class="flex justify-between text-sm">
-              <span class="text-on-surface-variant">已拥有资产</span>
+              <span class="text-on-surface-variant">已拥有商品</span>
               <span class="text-on-surface font-bold">{{ ownedAssetsCount }}</span>
             </div>
           </div>
@@ -63,9 +63,9 @@
       <section class="w-full lg:w-3/4 flex flex-col gap-8">
         
         <!-- My Assets Tab -->
-        <div v-if="activeTab === '我的资产'">
+        <div v-if="activeTab === '我的商品'">
           <div class="border-b border-outline-variant/20 pb-6 mb-4">
-            <h1 class="text-3xl font-bold text-on-surface tracking-tight">我的资产</h1>
+            <h1 class="text-3xl font-bold text-on-surface tracking-tight">我的商品</h1>
           </div>
 
           <div v-if="assetsLoading" class="flex justify-center py-12">
@@ -73,7 +73,7 @@
           </div>
 
           <div v-else-if="assets.length === 0" class="text-center text-on-surface-variant py-12">
-            <p>您目前还没有拥有任何数字资产。</p>
+            <p>您目前还没有拥有任何虚拟商品。</p>
             <router-link to="/all-assets" class="text-primary hover:underline mt-4 inline-block font-bold">前往市场选购</router-link>
           </div>
 
@@ -132,7 +132,7 @@
                   </span>
                 </div>
                 <h3 class="text-xl font-bold text-on-surface group-hover:text-primary transition-colors">
-                  {{ order.items && order.items.length > 0 ? order.items[0].product_name : '数字资产' }}
+                  {{ order.items && order.items.length > 0 ? order.items[0].product_name : '虚拟商品' }}
                   <span v-if="order.items && order.items.length > 1" class="text-sm text-on-surface-variant"> 等 {{ order.items.length }} 件商品</span>
                 </h3>
                 <p class="text-xs text-on-surface-variant font-mono">购买日期: {{ formatDate(order.created_at) }}</p>
@@ -194,7 +194,7 @@
       <div class="absolute inset-0 bg-black/70 backdrop-blur-md cursor-pointer" @click="isRechargeOpen = false"></div>
       <div class="relative glass-panel w-full max-w-md p-8 rounded-2xl border border-primary/30 shadow-[0_0_50px_rgba(0,229,255,0.15)] animate-fade-in">
         <button @click="isRechargeOpen = false" class="absolute top-4 right-4 text-on-surface-variant hover:text-primary"><X class="w-6 h-6"/></button>
-        <h2 class="text-2xl font-bold text-primary mb-2">充值矩阵余额</h2>
+        <h2 class="text-2xl font-bold text-primary mb-2">充值金库余额</h2>
         <p class="text-sm text-on-surface-variant mb-6">选择充值金额，即时到账。</p>
         
         <div class="grid grid-cols-3 gap-3 mb-6">
@@ -260,7 +260,7 @@ const settingsForm = reactive({
 });
 
 const menuItems = [
-  // { name: '我的资产', icon: FolderLock },
+  // { name: '我的商品', icon: FolderLock },
   { name: '我的订单', icon: ListTodo },
   { name: '设置', icon: Settings },
 ];
@@ -344,7 +344,7 @@ const formatDate = (dateStr: string) => {
 watch(activeTab, (newTab) => {
   if (newTab === '我的订单') {
     loadOrders();
-  } else if (newTab === '我的资产') {
+  } else if (newTab === '我的商品') {
     loadAssets();
   }
 });

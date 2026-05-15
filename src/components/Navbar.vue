@@ -32,7 +32,7 @@
           <input 
             type="text" 
             v-model="searchQuery"
-            placeholder="搜索资产..."
+            placeholder="搜索商品..."
             class="bg-surface-container/50 border-b border-outline-variant/50 focus:border-primary focus:ring-0 text-on-surface text-sm py-1 px-3 outline-none w-48 transition-all duration-300 placeholder-on-surface-variant/50"
           />
           <Search @click="handleSearch" class="absolute right-2 w-4 h-4 text-on-surface-variant cursor-pointer hover:text-primary transition-colors" />
@@ -69,7 +69,7 @@ const handleSearch = () => {
 
 const navLinks = [
   { name: '首页推荐', path: '/market' },
-  { name: '资产库', path: '/all-assets' },
-  { name: '我的资产', path: '/profile' }
+  { name: '商品库', path: '/all-assets' },
+  { name: '我的商品', path: '/profile' }
 ];
 </script>
