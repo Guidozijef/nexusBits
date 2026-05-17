@@ -16,12 +16,14 @@
     </router-view>
 
     <Cart />
+    <CustomerService />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import Cart from './components/Cart.vue';
+import CustomerService from './components/CustomerService.vue';
 import { store } from './store';
 
 onMounted(() => {

@@ -260,27 +260,27 @@
         </div>
 
         <!-- Order Metadata -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-surface-container/30 border border-outline-variant/20 rounded-xl">
-          <div>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 p-4 bg-surface-container/30 border border-outline-variant/20 rounded-xl">
+          <div class="sm:col-span-2 min-w-0">
             <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">订单编号</span>
-            <div class="flex items-center gap-1.5 text-xs font-mono font-bold text-on-surface">
-              <span>{{ selectedOrder?.order_no }}</span>
+            <div class="flex items-center gap-1.5 text-xs font-mono font-bold text-on-surface min-w-0">
+              <span class="truncate" :title="selectedOrder?.order_no">{{ selectedOrder?.order_no }}</span>
               <button 
                 @click="copyOrderNo(selectedOrder?.id, selectedOrder?.order_no)" 
-                class="p-0.5 text-on-surface-variant hover:text-primary transition-colors focus:outline-none"
+                class="p-0.5 text-on-surface-variant hover:text-primary transition-colors focus:outline-none flex-shrink-0"
                 title="复制订单编号"
               >
                 <component :is="copiedOrderId === selectedOrder?.id ? Check : Copy" class="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
-          <div>
+          <div class="min-w-0">
             <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">购买日期</span>
-            <span class="text-xs font-mono font-bold text-on-surface">{{ formatDate(selectedOrder?.created_at) }}</span>
+            <span class="text-xs font-mono font-bold text-on-surface block truncate">{{ formatDate(selectedOrder?.created_at) }}</span>
           </div>
-          <div>
+          <div class="min-w-0">
             <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">实付金额</span>
-            <span class="text-xs font-bold text-primary font-mono">{{ selectedOrder?.total_amount }} NB</span>
+            <span class="text-xs font-bold text-primary font-mono block truncate">{{ selectedOrder?.total_amount }} NB</span>
           </div>
         </div>
 
@@ -352,7 +352,7 @@
                     :is="copiedRemarkId === getProductAsset(item.product_id, selectedOrder.id)?.id ? Check : Copy" 
                     class="w-3.5 h-3.5" 
                   />
-                  {{ copiedRemarkId === getProductAsset(item.product_id, selectedOrder.id)?.id ? '已复制' : '复制备注' }}
+                  {{ copiedRemarkId === getProductAsset(item.product_id, selectedOrder.id)?.id ? '已复制' : '复制信息' }}
                 </button>
               </div>
               

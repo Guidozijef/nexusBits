@@ -76,15 +76,15 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="p-5 bg-surface-container/50 rounded-xl border border-outline-variant/20 flex flex-col gap-2 hover:border-outline-variant/50 transition-colors">
                 <h4 class="font-bold text-sm text-on-surface">交付方式</h4>
-                <p class="text-xs text-on-surface-variant leading-relaxed">自动发货商品会在支付完成后生成交付内容；人工处理商品会按订单信息核对后处理。</p>
+                <p class="text-xs text-on-surface-variant leading-relaxed">自动发货商品会在支付完成后生成交付内容；人工处理商品会按订单信息核对后处理需要一定时间。</p>
               </div>
               <div class="p-5 bg-surface-container/50 rounded-xl border border-outline-variant/20 flex flex-col gap-2 hover:border-outline-variant/50 transition-colors">
                 <h4 class="font-bold text-sm text-on-surface">订单查询</h4>
-                <p class="text-xs text-on-surface-variant leading-relaxed">下单后请保存订单号和查询凭证，可在订单查询页面查看支付、发货和售后进度。</p>
+                <p class="text-xs text-on-surface-variant leading-relaxed">下单后请前往我的订单页面，可在我的订单页面查看支付和售后进度。如果订单状态为处理中，请耐心等待，如果订单状态为已完成，可查看商品信息查询交付信息。</p>
               </div>
               <div class="p-5 bg-surface-container/50 rounded-xl border border-outline-variant/20 flex flex-col gap-2 hover:border-outline-variant/50 transition-colors">
                 <h4 class="font-bold text-sm text-on-surface">售后处理</h4>
-                <p class="text-xs text-on-surface-variant leading-relaxed">如支付成功后未自动更新、未收到交付内容或内容异常，请凭订单号联系客服。</p>
+                <p class="text-xs text-on-surface-variant leading-relaxed">部分商品需要人工审核处理，需要一定时间，请耐心等待，如果24小时后还未处理，请联系客服。如支付成功后未自动更新、未收到交付内容或内容异常，请凭订单号联系客服。</p>
               </div>
               <div class="p-5 bg-surface-container/50 rounded-xl border border-outline-variant/20 flex flex-col gap-2 hover:border-outline-variant/50 transition-colors">
                 <h4 class="font-bold text-sm text-on-surface">隐私保护</h4>
