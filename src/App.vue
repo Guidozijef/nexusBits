@@ -16,15 +16,21 @@
     </router-view>
 
     <Cart />
-    <CustomerService />
+    <CustomerService v-if="showCustomerService" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import Cart from './components/Cart.vue';
 import CustomerService from './components/CustomerService.vue';
 import { store } from './store';
+
+const route = useRoute();
+const showCustomerService = computed(() => {
+  return !route.path.startsWith('/admin');
+});
 
 onMounted(() => {
   store.initSession();
