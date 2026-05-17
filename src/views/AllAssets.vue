@@ -3,20 +3,20 @@
     <Navbar />
     <main class="max-w-7xl mx-auto px-6 py-12 flex flex-col lg:flex-row gap-8">
       <!-- Left Sidebar: Filters -->
-      <aside class="w-full lg:w-1/4 shrink-0 flex flex-col gap-6 sticky top-24 self-start z-10">
-        <div class="category-panel glass-panel p-6 rounded-2xl flex flex-col max-h-[calc(100vh-8rem)] w-full">
-          <h3 class="text-lg font-bold text-on-surface mb-6 flex items-center gap-2 border-b border-outline-variant/30 pb-4">
+      <aside class="w-full lg:w-1/4 shrink-0 flex flex-col gap-6 lg:sticky lg:top-24 lg:self-start z-10">
+        <div class="category-panel glass-panel p-4 md:p-6 rounded-2xl flex flex-col lg:max-h-[calc(100vh-8rem)] w-full">
+          <h3 class="text-base md:text-lg font-bold text-on-surface mb-4 lg:mb-6 flex items-center gap-2 border-b border-outline-variant/30 pb-3 lg:pb-4">
             <Layers class="w-5 h-5 text-primary" /> 商品分类
           </h3>
-          <div v-if="categoriesLoading" class="flex flex-col gap-2">
-            <div v-for="i in 8" :key="i" class="h-10 bg-surface-container-highest rounded-xl animate-pulse"></div>
+          <div v-if="categoriesLoading" class="flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 no-scrollbar">
+            <div v-for="i in 8" :key="i" class="h-10 w-24 lg:w-full shrink-0 bg-surface-container-highest rounded-xl animate-pulse"></div>
           </div>
-          <div v-else class="flex flex-col gap-2 overflow-y-auto custom-scrollbar pr-2 flex-grow">
+          <div v-else class="flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto custom-scrollbar pb-2 lg:pb-0 pr-0 lg:pr-2 flex-grow no-scrollbar">
             <button v-for="cat in categories" :key="cat.id" @click="selectCategory(cat)"
-              class="text-left px-4 py-3 rounded-xl transition-all text-sm font-medium flex justify-between items-center group"
+              class="text-left px-4 py-2.5 lg:py-3 rounded-xl transition-all text-xs lg:text-sm font-medium flex justify-between items-center group shrink-0 lg:shrink-0"
               :class="activeFilter === cat.name ? 'bg-primary/10 text-primary border border-primary/30 shadow-[0_0_15px_rgba(0,229,255,0.1)]' : 'text-on-surface-variant border border-transparent hover:bg-surface-container/50 hover:text-on-surface hover:border-outline-variant/30'">
-              {{ cat.name }}
-              <ChevronRight v-if="activeFilter === cat.name" class="w-4 h-4 text-primary animate-pulse" />
+              <span class="whitespace-nowrap">{{ cat.name }}</span>
+              <ChevronRight v-if="activeFilter === cat.name" class="w-4 h-4 text-primary animate-pulse hidden lg:block" />
             </button>
           </div>
         </div>
@@ -164,10 +164,21 @@ onUnmounted(() => { if (observer) observer.disconnect(); });
 </script>
 
 <style scoped>
-.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); border-radius: 4px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.2); border-radius: 4px; }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.5); }
+
+/* Hide scrollbar on mobile but keep swipe functionality */
+@media (max-width: 1023px) {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none !important; /* IE/Edge */
+    scrollbar-width: none !important; /* Firefox */
+  }
+}
 
 
 </style>

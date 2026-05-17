@@ -5,10 +5,10 @@
       <div class="relative overflow-hidden mb-24 pt-40">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-full bg-primary/10 blur-[100px] pointer-events-none rounded-[100%]"></div>
         <section class="flex flex-col items-center text-center relative z-10 pb-20">
-          <h1 class="font-display-lg text-5xl md:text-6xl text-on-surface mb-8 leading-tight font-bold tracking-tight">
+          <h1 class="font-display-lg text-3xl sm:text-4xl md:text-6xl text-on-surface mb-6 md:mb-8 leading-tight font-bold tracking-tight">
             获取您的<span class="text-primary-container drop-shadow-[0_0_15px_rgba(0,229,255,0.6)]">虚拟商品</span>
           </h1>
-          <p class="text-lg text-on-surface-variant mb-12 max-w-2xl">安全、快捷、即时获取。探索优质虚拟商品，满足您的多样化需求。</p>
+          <p class="text-base md:text-lg text-on-surface-variant mb-8 md:mb-12 max-w-2xl">安全、快捷、即时获取。探索优质虚拟商品，满足您的多样化需求。</p>
           <div class="flex gap-6">
             <button @click="$router.push('/all-assets')" class="bg-primary-container text-on-primary font-bold py-3 px-8 rounded btn-glow transition-all duration-300 flex items-center gap-2">
               立即探索 <ArrowRight class="w-5 h-5" />
