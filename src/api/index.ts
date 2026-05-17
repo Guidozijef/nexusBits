@@ -212,6 +212,9 @@ export const adminApi = {
   getProducts(params?: any) {
     return api.get('/admin/products', params);
   },
+  getProductById(id: number | string) {
+    return api.get(`/admin/products/${id}`);
+  },
   createProduct(data: any) {
     return api.post('/admin/products', data);
   },

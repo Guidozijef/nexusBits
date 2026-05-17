@@ -55,6 +55,11 @@
           <textarea v-model="form.long_description" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border"></textarea>
         </div>
 
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">商品备注 <span class="text-xs text-gray-400 font-normal">(仅后台可见，前端不返回、不展示)</span></label>
+          <textarea v-model="form.admin_note" rows="3" placeholder="在此输入此商品的管理员内部备注信息..." class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border"></textarea>
+        </div>
+
         <!-- Notices -->
         <div class="space-y-4 pt-4 border-t">
           <div class="flex items-center justify-between">
@@ -222,7 +227,8 @@ const form = ref<any>({
   types: [],
   packages: [],
   durations: [],
-  notices: []
+  notices: [],
+  admin_note: ''
 });
 
 onMounted(async () => {
@@ -236,7 +242,7 @@ onMounted(async () => {
 
   if (isEditing.value) {
     try {
-      const res = await productsApi.getById(route.params.id as string);
+      const res = await adminApi.getProductById(route.params.id as string);
       if (res.success && res.data) {
         form.value = { ...res.data };
         
