@@ -135,8 +135,8 @@
             <!-- Tags -->
             <div class="flex flex-wrap gap-2 mt-1">
               <span class="px-2 py-0.5 bg-surface-container border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">库存 99+</span>
-              <span class="px-2 py-0.5 bg-primary/10 border border-primary/30 rounded text-[10px] font-bold text-primary">自动交付</span>
-              <span class="px-2 py-0.5 bg-surface-container border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">官方渠道</span>
+              <span class="px-2 py-0.5 bg-primary/10 border border-primary/30 rounded text-[10px] font-bold text-primary">官方渠道</span>
+              <span class="px-2 py-0.5 bg-surface-container border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">自动交付</span>
               <span class="px-2 py-0.5 bg-surface-container border border-outline-variant/30 rounded text-[10px] text-on-surface-variant">极速发货</span>
             </div>
 

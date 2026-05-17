@@ -59,7 +59,7 @@
 
         <div class="space-y-2">
           <label class="block text-sm font-medium text-gray-700">详细介绍</label>
-          <textarea v-model="form.long_description" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border"></textarea>
+          <textarea v-model="form.long_description" rows="16" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border"></textarea>
         </div>
 
         <div class="space-y-2">
@@ -192,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeft, Plus, X, Loader2 } from 'lucide-vue-next';
 import { adminApi, categoriesApi, productsApi } from '../../api';
@@ -206,7 +206,7 @@ const saving = ref(false);
 const categories = ref<any[]>([]);
 
 const newType = ref('');
-const parsedTypes = ref<string[]>([]);
+const parsedTypes = ref<string[]>(isEditing.value ? [] : ['基础版']);
 
 const addType = () => {
   const t = newType.value.trim();
@@ -223,7 +223,26 @@ const removeType = (idx: number) => {
 const form = ref<any>({
   name: '',
   description: '',
-  long_description: '',
+  long_description: isEditing.value ? '' : `<p><strong>在此输入商品的一句话核心卖点或亮点介绍</strong></p>
+<p>本款数字资产是由官方渠道正规授权提供的优质商品，具备高度稳定性与极速响应支持。适合个人探索、商业部署或技术集成等多种场景。</p>
+
+<h3>💡 核心功能优势：</h3>
+<ul>
+  <li><strong>极速自动交付</strong>：付款完成后，系统将在秒级自动为您生成交付包及授权说明，无需漫长等待。</li>
+  <li><strong>官方正品保证</strong>：所有密钥及数据资产全程可追溯，确保您的账户绝对安全。</li>
+  <li><strong>24小时售后响应</strong>：配套专属售后客服，遇到任何技术部署难题支持快速人工复核。</li>
+</ul>
+
+<h3>📷 效果与实机展示图：</h3>
+<p>可以使用标准 <code>&lt;img src="..." /&gt;</code> 标签嵌入图片，以下为示例图（您可以将 src 替换为您的主图或详情图地址）：</p>
+<p><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" alt="示例展示图" /></p>
+
+<h3>📋 使用说明与部署指南：</h3>
+<ol>
+  <li>获取密钥后，请妥善保存，切勿泄露给第三方。</li>
+  <li>参照附带的部署文档，在您的测试或生产环境中输入对应配置。</li>
+  <li>如在激活过程中遇到任何异常，请凭订单号联系右下角客服处理。</li>
+</ol>`,
   price: 0,
   cost: 0,
   currency: 'NB',
@@ -233,8 +252,12 @@ const form = ref<any>({
   status: 'active',
   is_featured: false,
   types: [],
-  packages: [],
-  durations: [],
+  packages: isEditing.value ? [] : [
+    { name: '标准套餐', price: 9.9, _rawFeatures: '核心功能使用, 极速响应发货, 售后质保', _typeIdxs: [0, 1] }
+  ],
+  durations: isEditing.value ? [] : [
+    { name: '1个月', price_modifier: 9.9, tag: '推荐', _pkgIds: [1] }
+  ],
   notices: [
     '部分商品下单后需人工核验可能存在延迟属于正常现象，如果超过24小时没处理，请联系客服人员',
     '支付后，可前往我的订单查看订单状态，如果为<span class="text-error font-blod">已完成</span>即可查看商品信息，如果为<span class="text-error font-blod">处理中</span>，请耐心等待',
@@ -243,12 +266,28 @@ const form = ref<any>({
   admin_note: ''
 });
 
+watch(() => form.value.category_id, (newCatId) => {
+  if (!isEditing.value && categories.value.length > 0) {
+    const cat = categories.value.find((c: any) => c.id === Number(newCatId));
+    if (cat) {
+      form.value.tag = cat.name;
+    }
+  }
+});
+
 onMounted(async () => {
   // Load categories
   try {
     const catRes = await categoriesApi.list();
     if (catRes.success) {
       categories.value = catRes.data || [];
+      // Initialize default tag for new product
+      if (!isEditing.value && categories.value.length > 0) {
+        const cat = categories.value.find((c: any) => c.id === Number(form.value.category_id));
+        if (cat) {
+          form.value.tag = cat.name;
+        }
+      }
     }
   } catch (e) {}
 
