@@ -57,6 +57,7 @@
             <tr>
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">商品信息</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">分类</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">成本价格</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">基础价格</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">状态</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">时间</th>
@@ -88,6 +89,9 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="text-sm text-gray-600">{{ product.category?.name || '未分类' }}</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-bold text-gray-900">{{ product.cost }} <span class="text-xs font-normal text-gray-400">{{ product.currency }}</span></div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm font-bold text-gray-900">{{ product.price }} <span class="text-xs font-normal text-gray-400">{{ product.currency }}</span></div>
