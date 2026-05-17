@@ -5,6 +5,7 @@ import Details from '../views/Details.vue';
 import Profile from '../views/Profile.vue';
 import AllAssets from '../views/AllAssets.vue';
 import Checkout from '../views/Checkout.vue';
+import Support from '../views/Support.vue';
 
 // Admin views
 import AdminLayout from '../views/admin/AdminLayout.vue';
@@ -25,6 +26,7 @@ const routes = [
   { path: '/checkout/:id', component: Checkout, meta: { requiresAuth: true } },
   { path: '/profile', component: Profile, meta: { requiresAuth: true } },
   { path: '/all-assets', component: AllAssets },
+  { path: '/support', component: Support },
   {
     path: '/admin',
     component: AdminLayout,
