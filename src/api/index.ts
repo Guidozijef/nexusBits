@@ -201,3 +201,36 @@ export const userApi = {
     return api.get('/user/assets');
   },
 };
+
+// ============================================================
+// Admin API
+// ============================================================
+export const adminApi = {
+  getUsers() {
+    return api.get('/admin/users');
+  },
+  getProducts(params?: any) {
+    return api.get('/admin/products', params);
+  },
+  createProduct(data: any) {
+    return api.post('/admin/products', data);
+  },
+  updateProduct(id: number, data: any) {
+    return api.put(`/admin/products/${id}`, data);
+  },
+  deleteProduct(id: number) {
+    return api.delete(`/admin/products/${id}`);
+  },
+  createCategory(data: any) {
+    return api.post('/admin/categories', data);
+  },
+  updateCategory(id: number, data: any) {
+    return api.put(`/admin/categories/${id}`, data);
+  },
+  deleteCategory(id: number) {
+    return api.delete(`/admin/categories/${id}`);
+  },
+  updateProductStatus(id: number, status: string) {
+    return api.put(`/admin/products/${id}/status`, { status });
+  },
+};

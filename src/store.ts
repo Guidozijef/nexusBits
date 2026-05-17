@@ -29,6 +29,7 @@ export interface ProfileData {
   display_name: string;
   avatar_url: string | null;
   level: string;
+  role: string;
   balance: number;
   email: string | null;
 }
@@ -46,6 +47,10 @@ const store = reactive({
   // Computed-like
   get isLoggedIn(): boolean {
     return !!this.session?.access_token;
+  },
+
+  get isAdmin(): boolean {
+    return this.profile?.role === 'admin';
   },
 
   get balance(): number {

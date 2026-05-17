@@ -356,7 +356,7 @@ onMounted(async () => {
   }
   await Promise.all([
     loadProfileData(),
-    loadAssets()
+    loadOrders()
   ]);
 });
 </script>
