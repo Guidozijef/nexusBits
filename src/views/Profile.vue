@@ -122,10 +122,21 @@
               :class="{ 'opacity-60': order.status === '已过期' }"
             >
               <div class="flex flex-col gap-3">
-                <div class="flex items-center gap-3">
-                  <span class="text-[10px] font-mono text-outline">{{ order.order_no }}</span>
+                <div class="flex items-center gap-3 flex-wrap">
+                  <!-- Styled readable Order Number with Copy Button -->
+                  <div class="flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-highest/40 border border-outline-variant/30 rounded-lg text-xs font-mono text-primary/90">
+                    <span class="opacity-60 text-[10px] uppercase font-sans tracking-wider select-none">单号:</span>
+                    <span>{{ order.order_no }}</span>
+                    <button 
+                      @click.stop="copyOrderNo(order.id, order.order_no)"
+                      class="p-0.5 text-on-surface-variant hover:text-primary transition-colors focus:outline-none"
+                      title="复制订单号"
+                    >
+                      <component :is="copiedOrderId === order.id ? Check : Copy" class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                   <span 
-                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase border"
+                    class="px-2 py-1 rounded-lg text-[10px] font-bold uppercase border"
                     :class="order.status === '已完成' ? 'bg-primary/20 text-primary border-primary/30' : 'bg-surface-container-highest text-outline border-outline/30'"
                   >
                     {{ order.status }}
@@ -143,15 +154,10 @@
                 <div class="flex gap-2">
                   <button 
                     v-if="order.status === '已完成'"
-                    class="px-4 py-1.5 border border-primary text-primary rounded hover:bg-primary/10 transition-all text-xs font-bold flex items-center gap-2"
+                    @click="openOrderDetailsModal(order)"
+                    class="px-4 py-2 bg-primary/10 border border-primary/30 text-primary rounded-lg hover:bg-primary/20 hover:border-primary/60 transition-all text-xs font-bold flex items-center gap-2"
                   >
-                    <Key class="w-3.5 h-3.5" /> 获取密钥
-                  </button>
-                  <button 
-                    v-if="order.status === '已完成'"
-                    class="p-1.5 bg-surface-container-high text-on-surface hover:text-primary rounded transition-all"
-                  >
-                    <Download class="w-4 h-4" />
+                    <FolderLock class="w-3.5 h-3.5" /> 查看商品信息
                   </button>
                 </div>
               </div>
@@ -215,6 +221,149 @@
         </button>
       </div>
     </div>
+
+    <!-- Purchased Product Details Modal -->
+    <div v-if="isDetailsModalOpen" class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+      <!-- Backdrop with blur -->
+      <div class="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer" @click="isDetailsModalOpen = false"></div>
+      
+      <!-- Content Panel -->
+      <div class="relative glass-panel w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 md:p-8 rounded-2xl border border-primary/30 shadow-[0_0_50px_rgba(0,229,255,0.2)] animate-fade-in flex flex-col gap-6 scrollbar-thin">
+        
+        <!-- Close Button -->
+        <button 
+          @click="isDetailsModalOpen = false" 
+          class="absolute top-4 right-4 p-2 text-on-surface-variant hover:text-primary hover:bg-primary/10 rounded-xl transition-all duration-300 focus:outline-none"
+        >
+          <X class="w-6 h-6"/>
+        </button>
+
+        <!-- Header -->
+        <div>
+          <div class="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest mb-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+            已购商品详情
+          </div>
+          <h2 class="text-2xl font-bold text-on-surface">订单内包含的数字资产</h2>
+        </div>
+
+        <!-- Order Metadata -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-surface-container/30 border border-outline-variant/20 rounded-xl">
+          <div>
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">订单编号</span>
+            <div class="flex items-center gap-1.5 text-xs font-mono font-bold text-on-surface">
+              <span>{{ selectedOrder?.order_no }}</span>
+              <button 
+                @click="copyOrderNo(selectedOrder?.id, selectedOrder?.order_no)" 
+                class="p-0.5 text-on-surface-variant hover:text-primary transition-colors focus:outline-none"
+                title="复制订单编号"
+              >
+                <component :is="copiedOrderId === selectedOrder?.id ? Check : Copy" class="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+          <div>
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">购买日期</span>
+            <span class="text-xs font-mono font-bold text-on-surface">{{ formatDate(selectedOrder?.created_at) }}</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">实付金额</span>
+            <span class="text-xs font-bold text-primary font-mono">{{ selectedOrder?.total_amount }} NB</span>
+          </div>
+        </div>
+
+        <div class="h-px bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent"></div>
+
+        <!-- Products List -->
+        <div class="flex flex-col gap-5 overflow-y-auto pr-1">
+          <div 
+            v-for="item in selectedOrder?.items" 
+            :key="item.id"
+            class="p-5 bg-surface-container/10 border border-outline-variant/20 rounded-xl flex flex-col gap-4 hover:border-primary/20 transition-all duration-300 animate-fade-in"
+          >
+            <!-- Upper Section: Product Image and Main details -->
+            <div class="flex flex-col sm:flex-row gap-4">
+              <!-- Product Image -->
+              <div class="w-16 h-16 rounded-lg bg-surface-container-highest overflow-hidden flex-shrink-0 border border-outline-variant/30">
+                <img 
+                  v-if="getProductAsset(item.product_id, selectedOrder.id)?.product?.image_url" 
+                  :src="getProductAsset(item.product_id, selectedOrder.id)?.product?.image_url" 
+                  alt="Product" 
+                  class="w-full h-full object-cover"
+                />
+                <div class="w-full h-full flex items-center justify-center text-primary/40 bg-surface-container-highest/20">
+                  <FolderLock class="w-8 h-8" />
+                </div>
+              </div>
+
+              <!-- Product Details -->
+              <div class="flex-1 min-w-0 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap mb-1">
+                    <span class="text-sm font-bold text-on-surface truncate max-w-[250px]">{{ item.product_name }}</span>
+                    <span 
+                      v-if="getProductAsset(item.product_id, selectedOrder.id)?.product?.tag"
+                      class="px-1.5 py-0.5 bg-primary/10 border border-primary/20 text-primary text-[9px] font-bold rounded"
+                    >
+                      {{ getProductAsset(item.product_id, selectedOrder.id)?.product?.tag }}
+                    </span>
+                  </div>
+                  
+                  <!-- Package & Duration if available -->
+                  <div v-if="item.package_name || item.duration_name" class="flex gap-2 text-[10px] text-on-surface-variant font-mono mb-2">
+                    <span v-if="item.package_name">套餐: {{ item.package_name }}</span>
+                    <span v-if="item.duration_name">时长: {{ item.duration_name }}</span>
+                  </div>
+                </div>
+
+                <!-- Price info -->
+                <span class="text-xs font-mono text-on-surface-variant">价格: {{ item.price }} NB</span>
+              </div>
+            </div>
+
+            <!-- Lower Section: Remark Area (The absolute center of attention for the user) -->
+            <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 flex flex-col gap-2 relative group/remark">
+              <div class="flex justify-between items-center">
+                <span class="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                  商品重要备注 / 交付信息
+                </span>
+                
+                <!-- Copy Button -->
+                <button 
+                  v-if="getProductAsset(item.product_id, selectedOrder.id)?.remark"
+                  @click="copyRemark(getProductAsset(item.product_id, selectedOrder.id)?.id, getProductAsset(item.product_id, selectedOrder.id)?.remark)"
+                  class="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-bold focus:outline-none"
+                  title="复制备注信息"
+                >
+                  <component 
+                    :is="copiedRemarkId === getProductAsset(item.product_id, selectedOrder.id)?.id ? Check : Copy" 
+                    class="w-3.5 h-3.5" 
+                  />
+                  {{ copiedRemarkId === getProductAsset(item.product_id, selectedOrder.id)?.id ? '已复制' : '复制备注' }}
+                </button>
+              </div>
+              
+              <!-- Remark Content -->
+              <p class="text-xs text-on-surface leading-relaxed font-mono whitespace-pre-wrap select-all">
+                {{ getProductAsset(item.product_id, selectedOrder.id)?.remark || '商品已正常交付。该商品支持高级定制或需要后台配置，暂无特定备注。' }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Notice -->
+        <div class="text-[10px] text-on-surface-variant text-center mt-2 leading-relaxed bg-surface-container-high/20 p-3 rounded-lg border border-outline-variant/10">
+          ⚠️ 注意：获取的交付备注包含专有信息，仅供单用户或约定范围内使用，严禁对外公开或分发。
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Premium Toast Notification -->
+    <div v-if="toastMessage" class="fixed bottom-8 right-8 z-[300] glass-panel border border-primary/40 px-6 py-3 rounded-xl shadow-[0_0_35px_rgba(0,229,255,0.25)] flex items-center gap-3 animate-fade-in bg-black/60 backdrop-blur-md">
+      <div class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.8)]"></div>
+      <span class="text-sm font-bold text-on-surface">{{ toastMessage }}</span>
+    </div>
     
     <Footer />
   </div>
@@ -230,7 +379,9 @@ import {
   Key, 
   Download, 
   X,
-  Loader2
+  Loader2,
+  Copy,
+  Check
 } from 'lucide-vue-next';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
@@ -250,6 +401,59 @@ const rechargeLoading = ref(false);
 const orders = ref<any[]>([]);
 const assets = ref<any[]>([]);
 const ownedAssetsCount = ref(0);
+
+// --- Unique Copy & Toast State ---
+const copiedOrderId = ref<number | null>(null);
+const copiedRemarkId = ref<number | null>(null);
+const toastMessage = ref('');
+
+// --- Order Details Modal State ---
+const isDetailsModalOpen = ref(false);
+const selectedOrder = ref<any>(null);
+
+const showToast = (msg: string) => {
+  toastMessage.value = msg;
+  setTimeout(() => {
+    toastMessage.value = '';
+  }, 2500);
+};
+
+const copyOrderNo = async (orderId: number, orderNo: string) => {
+  try {
+    await navigator.clipboard.writeText(orderNo);
+    copiedOrderId.value = orderId;
+    showToast('订单编号已成功复制！');
+    setTimeout(() => {
+      copiedOrderId.value = null;
+    }, 2000);
+  } catch (err) {
+    console.error('Failed to copy order number:', err);
+  }
+};
+
+const copyRemark = async (assetId: number, remarkText: string) => {
+  if (!remarkText) return;
+  try {
+    await navigator.clipboard.writeText(remarkText);
+    copiedRemarkId.value = assetId;
+    showToast('备注信息已成功复制！');
+    setTimeout(() => {
+      copiedRemarkId.value = null;
+    }, 2000);
+  } catch (err) {
+    console.error('Failed to copy remark:', err);
+  }
+};
+
+const openOrderDetailsModal = (order: any) => {
+  selectedOrder.value = order;
+  isDetailsModalOpen.value = true;
+};
+
+const getProductAsset = (productId: number, orderId: number) => {
+  return assets.value.find(a => a.product_id === productId && a.order_id === orderId) 
+    || assets.value.find(a => a.product_id === productId);
+};
 
 const saveLoading = ref(false);
 const saveSuccess = ref(false);
@@ -356,7 +560,8 @@ onMounted(async () => {
   }
   await Promise.all([
     loadProfileData(),
-    loadOrders()
+    loadOrders(),
+    loadAssets()
   ]);
 });
 </script>
