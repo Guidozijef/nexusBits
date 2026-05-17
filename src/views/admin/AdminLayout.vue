@@ -34,6 +34,13 @@
         >
           <Package class="w-5 h-5" /> 商品管理
         </router-link>
+        <router-link 
+          to="/admin/orders" 
+          class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+          :class="$route.path.includes('/admin/orders') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'"
+        >
+          <FileText class="w-5 h-5" /> 订单管理
+        </router-link>
       </nav>
       <div class="p-4 border-t border-gray-200">
         <router-link to="/" class="flex items-center justify-center gap-2 w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
@@ -74,7 +81,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { LayoutDashboard, Users, Tag, Package, ArrowLeft } from 'lucide-vue-next';
+import { LayoutDashboard, Users, Tag, Package, ArrowLeft, FileText } from 'lucide-vue-next';
 import { store } from '../../store';
 
 const route = useRoute();
@@ -85,6 +92,7 @@ const pageTitle = computed(() => {
   if (route.path.includes('/products/new')) return '新建商品';
   if (route.path.includes('/products') && route.path.includes('/edit')) return '编辑商品';
   if (route.path.includes('/products')) return '商品管理';
+  if (route.path.includes('/orders')) return '订单管理';
   return '控制台';
 });
 </script>

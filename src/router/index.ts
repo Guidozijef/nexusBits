@@ -13,6 +13,7 @@ import AdminUsers from '../views/admin/Users.vue';
 import AdminCategories from '../views/admin/Categories.vue';
 import AdminProducts from '../views/admin/Products.vue';
 import AdminProductEdit from '../views/admin/ProductEdit.vue';
+import AdminOrders from '../views/admin/Orders.vue';
 
 import { store } from '../store';
 
@@ -35,7 +36,8 @@ const routes = [
       { path: 'categories', component: AdminCategories },
       { path: 'products', component: AdminProducts },
       { path: 'products/new', component: AdminProductEdit },
-      { path: 'products/:id/edit', component: AdminProductEdit }
+      { path: 'products/:id/edit', component: AdminProductEdit },
+      { path: 'orders', component: AdminOrders }
     ]
   }
 ];

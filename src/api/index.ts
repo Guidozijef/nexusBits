@@ -233,4 +233,10 @@ export const adminApi = {
   updateProductStatus(id: number, status: string) {
     return api.put(`/admin/products/${id}/status`, { status });
   },
+  getOrders(params?: { order_no?: string; search?: string; page?: number; limit?: number }) {
+    return api.get('/admin/orders', params as any);
+  },
+  updateAssetRemark(orderId: number, productId: number, remark: string) {
+    return api.put(`/admin/orders/${orderId}/products/${productId}/remark`, { remark });
+  },
 };

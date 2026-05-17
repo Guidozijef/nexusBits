@@ -137,7 +137,13 @@
                   </div>
                   <span 
                     class="px-2 py-1 rounded-lg text-[10px] font-bold uppercase border"
-                    :class="order.status === '已完成' ? 'bg-primary/20 text-primary border-primary/30' : 'bg-surface-container-highest text-outline border-outline/30'"
+                    :class="
+                      order.status === '已完成' 
+                        ? 'bg-primary/20 text-primary border-primary/30' 
+                        : order.status === '处理中'
+                          ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                          : 'bg-surface-container-highest text-outline border-outline/30'
+                    "
                   >
                     {{ order.status }}
                   </span>
@@ -150,7 +156,7 @@
               </div>
 
               <div class="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto gap-8 md:gap-3">
-                <span class="text-2xl font-bold" :class="order.status === '已完成' ? 'text-primary' : 'text-outline'">{{ order.total_amount }} NB</span>
+                <span class="text-2xl font-bold" :class="order.status === '已完成' || order.status === '处理中' ? 'text-primary' : 'text-outline'">{{ order.total_amount }} NB</span>
                 <div class="flex gap-2">
                   <button 
                     v-if="order.status === '已完成'"
@@ -159,6 +165,12 @@
                   >
                     <FolderLock class="w-3.5 h-3.5" /> 查看商品信息
                   </button>
+                  <div 
+                    v-else-if="order.status === '处理中'"
+                    class="px-4 py-2 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-default select-none"
+                  >
+                    <Loader2 class="w-3.5 h-3.5 animate-spin" /> 商家处理中...
+                  </div>
                 </div>
               </div>
             </div>
