@@ -22,6 +22,13 @@
             <input v-model="form.price" required type="number" step="0.01" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border" />
           </div>
           <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">
+              成本 (NB) * 
+              <span class="text-xs text-gray-400 font-normal">(仅后台记录，前端不展示)</span>
+            </label>
+            <input v-model="form.cost" required type="number" step="0.01" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border" />
+          </div>
+          <div class="space-y-2">
             <label class="block text-sm font-medium text-gray-700">分类 *</label>
             <select v-model="form.category_id" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border">
               <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
@@ -218,6 +225,7 @@ const form = ref<any>({
   description: '',
   long_description: '',
   price: 0,
+  cost: 0,
   currency: 'NB',
   category_id: 1,
   tag: '',

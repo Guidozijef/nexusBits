@@ -73,7 +73,7 @@
             <tr v-else-if="products.length === 0">
               <td colspan="6" class="px-6 py-10 text-center text-sm text-gray-400">未找到符合条件的商品</td>
             </tr>
-            <tr v-for="product in products" :key="product.id" class="hover:bg-gray-50 transition-colors">
+            <tr v-for="product in paginatedProducts" :key="product.id" class="hover:bg-gray-50 transition-colors">
               <td class="px-6 py-4">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden bg-gray-100 border border-gray-100">
@@ -128,18 +128,96 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination Controls -->
+      <div v-if="products.length > 0" class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between flex-wrap gap-4">
+        <div class="text-sm text-gray-500">
+          显示第 <span class="font-bold text-gray-900">{{ startIndex + 1 }}</span> 到 
+          <span class="font-bold text-gray-900">{{ Math.min(endIndex, products.length) }}</span> 条，
+          共 <span class="font-bold text-gray-900">{{ products.length }}</span> 条商品
+        </div>
+        <div class="flex items-center gap-1 flex-wrap">
+          <!-- Previous Page Button -->
+          <button 
+            @click="prevPage" 
+            :disabled="currentPage === 1"
+            class="p-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-600 transition-colors focus:outline-none cursor-pointer"
+            title="上一页"
+          >
+            <ChevronLeft class="w-4 h-4" />
+          </button>
+          
+          <!-- Page Number Buttons -->
+          <button 
+            v-for="page in totalPages" 
+            :key="page"
+            @click="goToPage(page)"
+            class="px-3 py-1.5 border rounded-lg text-sm font-semibold transition-all focus:outline-none cursor-pointer"
+            :class="currentPage === page 
+              ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' 
+              : 'border-gray-200 text-gray-600 hover:bg-gray-100 hover:text-gray-900'"
+          >
+            {{ page }}
+          </button>
+          
+          <!-- Next Page Button -->
+          <button 
+            @click="nextPage" 
+            :disabled="currentPage === totalPages"
+            class="p-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-600 transition-colors focus:outline-none cursor-pointer"
+            title="下一页"
+          >
+            <ChevronRight class="w-4 h-4" />
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue';
-import { Plus, Package, Search, Edit3, Trash2, ExternalLink, Power, Loader2 } from 'lucide-vue-next';
+import { ref, onMounted, reactive, computed } from 'vue';
+import { 
+  Plus, 
+  Package, 
+  Search, 
+  Edit3, 
+  Trash2, 
+  ExternalLink, 
+  Power, 
+  Loader2,
+  ChevronLeft,
+  ChevronRight
+} from 'lucide-vue-next';
 import { adminApi, categoriesApi } from '../../api';
 
 const products = ref<any[]>([]);
 const categories = ref<any[]>([]);
 const loading = ref(true);
+
+// --- Pagination State ---
+const currentPage = ref(1);
+const itemsPerPage = 10;
+
+const totalPages = computed(() => Math.ceil(products.value.length / itemsPerPage));
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage);
+const endIndex = computed(() => startIndex.value + itemsPerPage);
+
+const paginatedProducts = computed(() => {
+  return products.value.slice(startIndex.value, endIndex.value);
+});
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+};
+
+const goToPage = (page: number) => {
+  currentPage.value = page;
+};
 
 const filters = reactive({
   name: '',
@@ -166,6 +244,7 @@ const fetchProducts = async () => {
     const res = await adminApi.getProducts(params);
     if (res.success) {
       products.value = res.data || [];
+      currentPage.value = 1; // Reset to page 1 on search / reload
     }
   } catch (error) {
     console.error('Failed to load products', error);
@@ -224,6 +303,10 @@ const confirmDelete = async (product: any) => {
       const res = await adminApi.deleteProduct(product.id);
       if (res.success) {
         products.value = products.value.filter(p => p.id !== product.id);
+        // Correct current page if last item on last page is deleted
+        if (currentPage.value > totalPages.value && totalPages.value > 0) {
+          currentPage.value = totalPages.value;
+        }
       } else {
         alert('删除失败: ' + res.error);
       }
