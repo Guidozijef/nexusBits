@@ -235,7 +235,11 @@ const form = ref<any>({
   types: [],
   packages: [],
   durations: [],
-  notices: [],
+  notices: [
+    '部分商品下单后需人工核验可能存在延迟属于正常现象，如果超过24小时没处理，请联系客服人员',
+    '支付后，可前往我的订单查看订单状态，如果为<span class="text-error font-blod">已完成</span>即可查看商品信息，如果为<span class="text-error font-blod">处理中</span>，请耐心等待',
+    '<span class="text-error font-blod">一定要按照订单中商品信息的说明进行使用，如不按照说明使用，本站概不质保</span>'
+  ],
   admin_note: ''
 });
 
@@ -291,7 +295,7 @@ const addDuration = () => {
 
 const addNotice = () => {
   if (!form.value.notices) form.value.notices = [];
-  form.value.notices.push('');
+  form.value.notices.unshift('');
 };
 
 const handleSubmit = async () => {

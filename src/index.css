@@ -57,3 +57,8 @@
 body {
   @apply bg-background text-on-background font-sans;
 }
+
+/* Tyranny of typos: ensure .font-blod maps correctly to bold weight */
+.font-blod {
+  font-weight: bold;
+}

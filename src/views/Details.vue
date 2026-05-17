@@ -170,7 +170,7 @@
                   </div>
                   <div class="flex justify-between items-center w-full gap-2">
                     <span class="text-sm font-medium text-on-surface leading-tight">{{ dur.name }}</span>
-                    <span class="text-base font-bold text-primary shrink-0">¥ {{ (selectedPackage?.price || 0) + (dur.price_modifier || 0) }}</span>
+                    <span class="text-base font-bold text-primary shrink-0">¥ {{ dur.price_modifier || 0 }}</span>
                   </div>
                 </div>
                 </div>
@@ -316,8 +316,12 @@ watch(selectedPackage, () => {
 const totalPrice = computed(() => {
   if (!product.value) return 0;
   let base = product.value.price || 0;
-  if (selectedPackage.value) base = selectedPackage.value.price;
-  if (selectedDuration.value) base += selectedDuration.value.price_modifier;
+  if (selectedPackage.value) {
+    base = selectedPackage.value.price;
+  }
+  if (selectedDuration.value) {
+    base = selectedDuration.value.price_modifier;
+  }
   return base * quantity.value;
 });
 

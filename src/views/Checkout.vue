@@ -235,8 +235,12 @@ const selectedDurName = computed(() => selectedDuration.value?.name || '默认�
 const unitPrice = computed(() => {
   if (!product.value) return 0;
   let base = product.value.price;
-  if (selectedPackage.value) base = selectedPackage.value.price;
-  if (selectedDuration.value) base += selectedDuration.value.price_modifier;
+  if (selectedPackage.value) {
+    base = selectedPackage.value.price;
+  }
+  if (selectedDuration.value) {
+    base = selectedDuration.value.price_modifier;
+  }
   return base;
 });
 const subTotal = computed(() => unitPrice.value * qty.value);
