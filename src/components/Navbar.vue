@@ -70,7 +70,7 @@ const handleSearch = () => {
 const navLinks = [
   { name: '首页推荐', path: '/market' },
   { name: '商品库', path: '/all-assets' },
-  { name: '我的商品', path: '/profile' },
+  { name: '我的订单', path: '/profile' },
   { name: '联系客服', path: '/support' }
 ];
 </script>
