@@ -6,7 +6,7 @@
 
     <!-- Filters Bar -->
     <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-4">
-      <form @submit.prevent="handleSearch" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+      <form @submit.prevent="handleSearch" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
         <div>
           <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">订单编号</label>
           <input 
@@ -24,6 +24,20 @@
             placeholder="搜索邮箱或昵称" 
             class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2 px-3 border"
           />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">订单状态</label>
+          <select 
+            v-model="filters.status" 
+            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2 px-3 border bg-white"
+          >
+            <option value="">全部状态</option>
+            <option value="处理中">处理中</option>
+            <option value="已完成">已完成</option>
+            <option value="待支付">待支付</option>
+            <option value="已过期">已过期</option>
+            <option value="已取消">已取消</option>
+          </select>
         </div>
         <div class="flex gap-2">
           <button 
@@ -178,7 +192,7 @@
             <h4 class="text-base font-bold text-gray-900">修改交付备注信息</h4>
             <p class="text-xs text-gray-500 mt-1 font-mono">订单: {{ selectedOrder?.order_no }} | 买家: {{ selectedOrder?.profile?.display_name }}</p>
           </div>
-          <button @click="closeModal" class="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none">
+          <button @click="closeModal(false)" class="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none">
             <X class="w-5 h-5" />
           </button>
         </div>
@@ -195,6 +209,14 @@
               <span v-if="item.package_name" class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-mono font-semibold">
                 {{ item.package_name }}
               </span>
+            </div>
+
+            <!-- Product Admin Note Template / Reference -->
+            <div v-if="item.product_admin_note" class="bg-amber-50/50 border border-amber-200/50 rounded-lg p-3 text-xs text-amber-900 space-y-1">
+              <span class="font-bold flex items-center gap-1">
+                <Info class="w-3.5 h-3.5 text-amber-600 animate-pulse" /> 商品管理员备注（可双击或直接复制参考）：
+              </span>
+              <p class="whitespace-pre-wrap font-mono text-gray-600 bg-white p-2 border border-amber-100 rounded mt-1 select-all pointer-events-auto">{{ item.product_admin_note }}</p>
             </div>
 
             <div>
@@ -231,7 +253,7 @@
         <!-- Footer -->
         <div class="px-6 py-4 border-t border-gray-200 flex justify-end bg-gray-50">
           <button 
-            @click="closeModal" 
+            @click="closeModal(true)" 
             class="bg-white hover:bg-gray-100 text-gray-700 font-medium py-2 px-6 rounded-md text-sm border border-gray-300 shadow-sm transition-all focus:outline-none"
           >
             完成并关闭
@@ -244,7 +266,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
-import { Search, Loader2, FileEdit, X, Save, Check } from 'lucide-vue-next';
+import { Search, Loader2, FileEdit, X, Save, Check, Info } from 'lucide-vue-next';
 import { adminApi } from '../../api';
 
 // --- State Variables ---
@@ -257,7 +279,8 @@ const totalPages = ref(1);
 
 const filters = reactive({
   orderNo: '',
-  search: ''
+  search: '',
+  status: ''
 });
 
 // --- Modal State ---
@@ -275,6 +298,7 @@ const loadOrders = async () => {
     const res = await adminApi.getOrders({
       order_no: filters.orderNo || undefined,
       search: filters.search || undefined,
+      status: filters.status || undefined,
       page: page.value,
       limit: limit.value
     });
@@ -298,6 +322,7 @@ const handleSearch = () => {
 const resetFilters = () => {
   filters.orderNo = '';
   filters.search = '';
+  filters.status = '';
   page.value = 1;
   loadOrders();
 };
@@ -332,11 +357,12 @@ const openEditModal = (order: any) => {
   isModalOpen.value = true;
 };
 
-const closeModal = () => {
+const closeModal = (shouldReload = false) => {
   isModalOpen.value = false;
   selectedOrder.value = null;
-  // Reload current order list to keep state perfectly synchronized
-  loadOrders();
+  if (shouldReload) {
+    loadOrders();
+  }
 };
 
 const saveRemark = async (productId: number) => {
@@ -354,6 +380,13 @@ const saveRemark = async (productId: number) => {
     );
     if (res.success) {
       successForm[productId] = true;
+      
+      // Update local state directly so the table and modal stay perfectly in sync
+      const item = selectedOrder.value.items.find((i: any) => i.product_id === productId);
+      if (item) {
+        item.remark = remarksForm[productId];
+      }
+      
       // Auto-clear success message after 3 seconds
       setTimeout(() => {
         successForm[productId] = false;
