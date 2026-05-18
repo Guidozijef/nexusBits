@@ -50,6 +50,13 @@
               <option value="archived">下架</option>
             </select>
           </div>
+          <div class="space-y-2 flex flex-col justify-end pb-0.5">
+            <label class="block text-sm font-medium text-gray-700 md:mb-1.5">首页推荐</label>
+            <label class="inline-flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-300 rounded-md cursor-pointer transition-colors shadow-sm select-none w-full h-[38px]">
+              <input v-model="form.is_featured" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer" />
+              <span class="text-sm font-medium text-gray-700">推荐展示在首页</span>
+            </label>
+          </div>
         </div>
 
         <div class="space-y-2">
@@ -123,9 +130,10 @@
             <button type="button" @click="form.packages.splice(idx, 1)" class="absolute top-2 right-2 text-red-500 hover:text-red-700">
               <X class="w-4 h-4" />
             </button>
-            <div class="grid grid-cols-2 gap-4 mb-2">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
               <input v-model="pkg.name" placeholder="套餐名称" required class="rounded-md border-gray-300 shadow-sm sm:text-sm px-3 py-1.5 border" />
               <input v-model="pkg.price" type="number" step="0.01" placeholder="价格" required class="rounded-md border-gray-300 shadow-sm sm:text-sm px-3 py-1.5 border" />
+              <input v-model="pkg.tag" placeholder="标签 (如: 推荐)" class="rounded-md border-gray-300 shadow-sm sm:text-sm px-3 py-1.5 border" />
             </div>
             <input v-model="pkg._rawFeatures" placeholder="包含功能，用逗号分隔 (如: 解锁全站, 专属客服)" class="w-full rounded-md border-gray-300 shadow-sm sm:text-sm px-3 py-1.5 border mt-2" />
             
@@ -253,7 +261,7 @@ const form = ref<any>({
   is_featured: false,
   types: [],
   packages: isEditing.value ? [] : [
-    { name: '标准套餐', price: 9.9, _rawFeatures: '核心功能使用, 极速响应发货, 售后质保', _typeIdxs: [0, 1] }
+    { name: '标准套餐', price: 9.9, tag: '80%用户选择', _rawFeatures: '核心功能使用, 极速响应发货, 售后质保', _typeIdxs: [0, 1] }
   ],
   durations: isEditing.value ? [] : [
     { name: '1个月', price_modifier: 9.9, tag: '推荐', _pkgIds: [1] }
@@ -324,7 +332,7 @@ onMounted(async () => {
 
 const addPackage = () => {
   if (!form.value.packages) form.value.packages = [];
-  form.value.packages.push({ name: '', price: 0, _rawFeatures: '', _typeIdxs: [] });
+  form.value.packages.push({ name: '', price: 0, tag: '', _rawFeatures: '', _typeIdxs: [] });
 };
 
 const addDuration = () => {
@@ -351,6 +359,7 @@ const handleSubmit = async () => {
         id: pkg.id || idx + 1,
         name: pkg.name,
         price: Number(pkg.price),
+        tag: pkg.tag || null,
         features: pkg._rawFeatures ? pkg._rawFeatures.split(',').map((s: string) => s.trim()).filter((s: string) => s) : [],
         type_idxs: pkg._typeIdxs && pkg._typeIdxs.length > 0 ? pkg._typeIdxs : null
       }));

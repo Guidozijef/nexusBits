@@ -59,6 +59,7 @@
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">分类</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">成本价格</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">基础价格</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">首页推荐</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">状态</th>
               <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">时间</th>
               <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">操作</th>
@@ -66,13 +67,13 @@
           </thead>
           <tbody class="bg-white divide-y divide-gray-100">
             <tr v-if="loading">
-              <td colspan="6" class="px-6 py-10 text-center text-sm text-gray-400">
+              <td colspan="8" class="px-6 py-10 text-center text-sm text-gray-400">
                 <Loader2 class="w-6 h-6 animate-spin mx-auto mb-2" />
                 正在努力加载中...
               </td>
             </tr>
             <tr v-else-if="products.length === 0">
-              <td colspan="6" class="px-6 py-10 text-center text-sm text-gray-400">未找到符合条件的商品</td>
+              <td colspan="8" class="px-6 py-10 text-center text-sm text-gray-400">未找到符合条件的商品</td>
             </tr>
             <tr v-for="product in paginatedProducts" :key="product.id" class="hover:bg-gray-50 transition-colors">
               <td class="px-6 py-4">
@@ -95,6 +96,14 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm font-bold text-gray-900">{{ product.price }} <span class="text-xs font-normal text-gray-400">{{ product.currency }}</span></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2.5 py-1 inline-flex text-[11px] font-bold rounded-full border"
+                  :class="product.is_featured 
+                    ? 'bg-indigo-50 text-indigo-700 border-indigo-200' 
+                    : 'bg-gray-50 text-gray-400 border-gray-100'">
+                  {{ product.is_featured ? '是' : '否' }}
+                </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2.5 py-1 inline-flex text-[11px] font-bold rounded-full border"

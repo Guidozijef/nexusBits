@@ -124,8 +124,8 @@
                     <Check class="w-5 h-5 text-surface-container-lowest" stroke-width="3" />
                   </div>
 
-                  <div v-if="pkg.recommended" class="absolute top-0 left-0 bg-gradient-to-r from-primary to-[#00b0ff] text-surface-container-lowest text-[10px] font-bold px-3 py-1 rounded-br-xl rounded-tl-xl shadow-[0_2px_10px_rgba(0,229,255,0.4)] z-10">
-                    推荐
+                  <div v-if="pkg.tag" class="absolute top-0 left-0 bg-gradient-to-r from-primary to-[#00b0ff] text-surface-container-lowest text-[10px] font-bold px-3 py-1 rounded-br-xl rounded-tl-xl shadow-[0_2px_10px_rgba(0,229,255,0.4)] z-10">
+                    {{ pkg.tag }}
                   </div>
                   <div class="text-center pb-4 border-b border-outline-variant/20">
                     <h4 class="text-base font-bold text-on-surface">{{ pkg.name }}</h4>
