@@ -260,27 +260,27 @@
         </div>
 
         <!-- Order Metadata -->
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 p-4 bg-surface-container/30 border border-outline-variant/20 rounded-xl">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 p-4.5 bg-surface-container/30 border border-outline-variant/20 rounded-xl">
           <div class="sm:col-span-2 min-w-0">
-            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">订单编号</span>
-            <div class="flex items-center gap-1.5 text-xs font-mono font-bold text-on-surface min-w-0">
+            <span class="text-xs text-on-surface-variant uppercase tracking-wider block mb-1">订单编号</span>
+            <div class="flex items-center gap-1.5 text-sm font-mono font-bold text-on-surface min-w-0">
               <span class="truncate" :title="selectedOrder?.order_no">{{ selectedOrder?.order_no }}</span>
               <button 
                 @click="copyOrderNo(selectedOrder?.id, selectedOrder?.order_no)" 
-                class="p-0.5 text-on-surface-variant hover:text-primary transition-colors focus:outline-none flex-shrink-0"
+                class="p-1 text-on-surface-variant hover:text-primary hover:bg-primary/10 rounded transition-all focus:outline-none flex-shrink-0"
                 title="复制订单编号"
               >
-                <component :is="copiedOrderId === selectedOrder?.id ? Check : Copy" class="w-3.5 h-3.5" />
+                <component :is="copiedOrderId === selectedOrder?.id ? Check : Copy" class="w-4 h-4" />
               </button>
             </div>
           </div>
           <div class="min-w-0">
-            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">购买日期</span>
-            <span class="text-xs font-mono font-bold text-on-surface block truncate">{{ formatDate(selectedOrder?.created_at) }}</span>
+            <span class="text-xs text-on-surface-variant uppercase tracking-wider block mb-1">购买日期</span>
+            <span class="text-sm font-mono font-bold text-on-surface block truncate">{{ formatDate(selectedOrder?.created_at) }}</span>
           </div>
           <div class="min-w-0">
-            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1">实付金额</span>
-            <span class="text-xs font-bold text-primary font-mono block truncate">{{ selectedOrder?.total_amount }} NB</span>
+            <span class="text-xs text-on-surface-variant uppercase tracking-wider block mb-1">实付金额</span>
+            <span class="text-sm font-bold text-primary font-mono block truncate">{{ selectedOrder?.total_amount }} NB</span>
           </div>
         </div>
 
@@ -309,63 +309,65 @@
               </div>
 
               <!-- Product Details -->
-              <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div class="flex-1 min-w-0 flex flex-col justify-between gap-1">
                 <div>
-                  <div class="flex items-center gap-2 flex-wrap mb-1">
-                    <span class="text-sm font-bold text-on-surface truncate max-w-[250px]">{{ item.product_name }}</span>
+                  <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                    <span class="text-base font-bold text-on-surface truncate max-w-[250px]">{{ item.product_name }}</span>
                     <span 
                       v-if="getProductAsset(item.product_id, selectedOrder.id)?.product?.tag"
-                      class="px-1.5 py-0.5 bg-primary/10 border border-primary/20 text-primary text-[9px] font-bold rounded"
+                      class="px-2 py-0.5 bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold rounded"
                     >
                       {{ getProductAsset(item.product_id, selectedOrder.id)?.product?.tag }}
                     </span>
                   </div>
                   
                   <!-- Package & Duration if available -->
-                  <div v-if="item.package_name || item.duration_name" class="flex gap-2 text-[10px] text-on-surface-variant font-mono mb-2">
-                    <span v-if="item.package_name">套餐: {{ item.package_name }}</span>
-                    <span v-if="item.duration_name">时长: {{ item.duration_name }}</span>
+                  <div v-if="item.package_name || item.duration_name" class="flex flex-wrap gap-x-3 gap-y-1 text-xs text-on-surface-variant font-mono mb-2">
+                    <span v-if="item.package_name" class="bg-surface-container-high/40 px-2 py-0.5 rounded border border-outline-variant/10">套餐: {{ item.package_name }}</span>
+                    <span v-if="item.duration_name" class="bg-surface-container-high/40 px-2 py-0.5 rounded border border-outline-variant/10">时长: {{ item.duration_name }}</span>
                   </div>
                 </div>
 
                 <!-- Price info -->
-                <span class="text-xs font-mono text-on-surface-variant">价格: {{ item.price }} NB</span>
+                <span class="text-sm font-mono text-on-surface-variant">结算价格: <span class="font-bold text-on-surface">{{ item.price }}</span> NB</span>
               </div>
             </div>
 
             <!-- Lower Section: Remark Area (The absolute center of attention for the user) -->
-            <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 flex flex-col gap-2 relative group/remark">
-              <div class="flex justify-between items-center">
-                <span class="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                  商品重要备注 / 交付信息
+            <div class="bg-primary/10 border border-primary/40 rounded-xl p-5 md:p-6 flex flex-col gap-3.5 relative group/remark shadow-md">
+              <div class="flex justify-between items-center border-b border-primary/20 pb-2">
+                <span class="text-xs md:text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.8)]"></span>
+                  商品重要备注 / 交付凭证信息
                 </span>
                 
                 <!-- Copy Button -->
                 <button 
                   v-if="getProductAsset(item.product_id, selectedOrder.id)?.remark"
                   @click="copyRemark(getProductAsset(item.product_id, selectedOrder.id)?.id, getProductAsset(item.product_id, selectedOrder.id)?.remark)"
-                  class="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-bold focus:outline-none"
+                  class="text-xs text-primary hover:text-primary/80 bg-primary/20 hover:bg-primary/30 px-3 py-1.5 rounded-lg border border-primary/30 transition-all flex items-center gap-1.5 font-bold focus:outline-none"
                   title="复制备注信息"
                 >
                   <component 
                     :is="copiedRemarkId === getProductAsset(item.product_id, selectedOrder.id)?.id ? Check : Copy" 
                     class="w-3.5 h-3.5" 
                   />
-                  {{ copiedRemarkId === getProductAsset(item.product_id, selectedOrder.id)?.id ? '已复制' : '复制信息' }}
+                  {{ copiedRemarkId === getProductAsset(item.product_id, selectedOrder.id)?.id ? '已复制' : '复制交付信息' }}
                 </button>
               </div>
               
-              <!-- Remark Content -->
-              <p class="text-xs text-on-surface leading-relaxed font-mono whitespace-pre-wrap select-all">
-                {{ getProductAsset(item.product_id, selectedOrder.id)?.remark || '商品已正常交付。该商品支持高级定制或需要后台配置，暂无特定备注。' }}
-              </p>
+              <!-- Remark Content Box -->
+              <div class="bg-surface-container-lowest/95 border border-primary/30 rounded-lg p-4 shadow-inner mt-1">
+                <p class="text-[15px] md:text-base text-on-surface leading-relaxed font-mono whitespace-pre-wrap select-all font-bold tracking-wide">
+                  {{ getProductAsset(item.product_id, selectedOrder.id)?.remark || '商品已正常交付。该商品支持高级定制或需要后台配置，暂无特定备注。' }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Footer Notice -->
-        <div class="text-[10px] text-on-surface-variant text-center mt-2 leading-relaxed bg-surface-container-high/20 p-3 rounded-lg border border-outline-variant/10">
+        <div class="text-[12px] text-on-surface-variant text-center mt-2 leading-relaxed bg-surface-container-high/20 p-3 rounded-lg border border-outline-variant/10">
           ⚠️ 注意：获取的交付备注包含专有信息，仅供单用户或约定范围内使用，严禁对外公开或分发。
         </div>
       </div>

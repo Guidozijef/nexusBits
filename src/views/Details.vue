@@ -182,7 +182,7 @@
               <h2 class="text-xl font-bold text-on-surface border-b border-outline-variant/30 pb-4 flex items-center gap-2">
                 <FileText class="w-5 h-5 text-primary" /> 商品介绍
               </h2>
-              <div class="text-on-surface-variant leading-relaxed text-sm rich-text-content" v-html="product.long_description || product.description">
+              <div class="text-on-surface-variant leading-relaxed text-[15px] md:text-base rich-text-content" v-html="product.long_description || product.description">
               </div>
             </div>
 
@@ -192,7 +192,7 @@
               <h2 class="text-xl font-bold text-error border-b border-error/20 pb-4 flex items-center gap-2 relative z-10">
                 <AlertTriangle class="w-5 h-5" /> 注意事项
               </h2>
-              <ul class="text-on-surface-variant space-y-3 leading-relaxed text-sm list-disc pl-5 relative z-10">
+              <ul class="text-on-surface-variant space-y-3 leading-relaxed text-[15px] md:text-base list-disc pl-5 relative z-10">
                 <template v-if="product.notices && product.notices.length > 0">
                   <li v-for="(notice, idx) in product.notices" :key="idx" v-html="notice"></li>
                 </template>
@@ -381,7 +381,10 @@ const handleBuyNow = () => {
 }
 
 /* Rich Text Content Styles */
-.rich-text-content :deep(p) { margin-bottom: 1rem; line-height: 1.6; }
+.rich-text-content :deep(p) { margin-bottom: 1rem; line-height: 1.6; font-size: 15px; }
+@media (min-width: 768px) {
+  .rich-text-content :deep(p) { font-size: 16px; }
+}
 .rich-text-content :deep(p:last-child) { margin-bottom: 0; }
 .rich-text-content :deep(img) { 
   max-width: 100%; 
