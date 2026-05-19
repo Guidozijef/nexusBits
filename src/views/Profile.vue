@@ -3,8 +3,8 @@
     <Navbar />
     
     <main class="max-w-7xl mx-auto px-6 py-12 flex flex-col lg:flex-row gap-8 relative z-10">
-      <!-- Left Sidebar: User Profile -->
-      <aside class="w-full lg:w-1/4">
+      <!-- Left Sidebar: User Profile (Sticky) -->
+      <aside class="w-full lg:w-1/4 lg:sticky lg:top-28 lg:self-start">
         <div v-if="profileLoading" class="glass-panel rounded-2xl p-8 flex flex-col items-center text-center space-y-8 animate-pulse">
           <div class="w-32 h-32 rounded-full bg-surface-container-highest"></div>
           <div class="h-6 bg-surface-container-highest rounded w-1/2"></div>
@@ -172,6 +172,47 @@
                     <Loader2 class="w-3.5 h-3.5 animate-spin" /> 商家处理中...
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <div v-if="totalPages > 1" class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-outline-variant/20 animate-fade-in">
+              <div class="text-xs text-on-surface-variant font-mono">
+                第 <span class="text-primary font-bold">{{ currentPage }}</span> / <span class="text-on-surface font-bold">{{ totalPages }}</span> 页，共 <span class="text-primary font-bold">{{ totalOrders }}</span> 笔订单
+              </div>
+              <div class="flex items-center gap-1.5">
+                <!-- Previous Page Button -->
+                <button 
+                  @click="prevPage" 
+                  :disabled="currentPage === 1"
+                  class="p-2 border border-outline-variant/30 rounded-xl text-on-surface-variant hover:bg-primary/10 hover:text-primary hover:border-primary/40 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-on-surface-variant disabled:hover:border-outline-variant/30 transition-all focus:outline-none cursor-pointer"
+                  title="上一页"
+                >
+                  <ChevronLeft class="w-4 h-4" />
+                </button>
+                
+                <!-- Page Number Buttons -->
+                <button 
+                  v-for="p in totalPages" 
+                  :key="p"
+                  @click="goToPage(p)"
+                  class="w-9 h-9 border rounded-xl text-xs font-bold transition-all focus:outline-none cursor-pointer flex items-center justify-center font-mono"
+                  :class="currentPage === p 
+                    ? 'bg-primary border-primary text-surface-container-lowest shadow-[0_0_15px_rgba(0,229,255,0.4)] font-extrabold' 
+                    : 'border-outline-variant/30 text-on-surface-variant hover:bg-surface-container/50 hover:text-on-surface hover:border-primary/30'"
+                >
+                  {{ p }}
+                </button>
+                
+                <!-- Next Page Button -->
+                <button 
+                  @click="nextPage" 
+                  :disabled="currentPage === totalPages"
+                  class="p-2 border border-outline-variant/30 rounded-xl text-on-surface-variant hover:bg-primary/10 hover:text-primary hover:border-primary/40 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-on-surface-variant disabled:hover:border-outline-variant/30 transition-all focus:outline-none cursor-pointer"
+                  title="下一页"
+                >
+                  <ChevronRight class="w-4 h-4" />
+                </button>
               </div>
             </div>
           </div>
@@ -384,7 +425,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive, watch } from 'vue';
+import { ref, onMounted, reactive, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { 
   FolderLock,
@@ -395,7 +436,9 @@ import {
   X,
   Loader2,
   Copy,
-  Check
+  Check,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-vue-next';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
@@ -415,6 +458,12 @@ const rechargeLoading = ref(false);
 const orders = ref<any[]>([]);
 const assets = ref<any[]>([]);
 const ownedAssetsCount = ref(0);
+
+// --- Orders Pagination State ---
+const totalOrders = ref(0);
+const currentPage = ref(1);
+const limit = ref(10);
+const totalPages = computed(() => Math.ceil(totalOrders.value / limit.value) || 1);
 
 // --- Unique Copy & Toast State ---
 const copiedOrderId = ref<number | null>(null);
@@ -495,14 +544,36 @@ const loadProfileData = async () => {
 const loadOrders = async () => {
   ordersLoading.value = true;
   try {
-    const res = await ordersApi.list();
+    const res = await ordersApi.list(currentPage.value, limit.value);
     if (res.success) {
       orders.value = res.data;
+      totalOrders.value = res.total || 0;
     }
   } catch (e) {
     console.error('Failed to load orders:', e);
   }
   ordersLoading.value = false;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    loadOrders();
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+    loadOrders();
+  }
+};
+
+const goToPage = (pageNumber: number) => {
+  if (pageNumber >= 1 && pageNumber <= totalPages.value) {
+    currentPage.value = pageNumber;
+    loadOrders();
+  }
 };
 
 const loadAssets = async () => {
@@ -561,6 +632,7 @@ const formatDate = (dateStr: string) => {
 
 watch(activeTab, (newTab) => {
   if (newTab === '我的订单') {
+    currentPage.value = 1;
     loadOrders();
   } else if (newTab === '我的商品') {
     loadAssets();
