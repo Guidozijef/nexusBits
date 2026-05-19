@@ -65,6 +65,12 @@ class ApiClient {
 
     const data = await response.json();
 
+    if (response.status === 401 && !path.includes('/auth/login')) {
+      localStorage.removeItem('nexusbits_session');
+      window.location.href = '/login';
+      throw new ApiError('登录已过期，请重新登录', 401, data);
+    }
+
     if (!response.ok) {
       throw new ApiError(data.error || '请求失败', response.status, data);
     }
