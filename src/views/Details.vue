@@ -203,6 +203,17 @@
                 </template>
               </ul>
             </div>
+
+            <!-- Disclaimer Notice -->
+            <div class="glass-panel p-6 rounded-2xl flex flex-col gap-4 border border-amber-500/20 bg-amber-500/5 relative overflow-hidden mt-4">
+              <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-2xl pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
+              <h2 class="text-lg font-bold text-amber-500 border-b border-amber-500/20 pb-4 flex items-center gap-2 relative z-10">
+                <ShieldAlert class="w-5 h-5" /> 法律声明与使用规则
+              </h2>
+              <p class="text-on-surface-variant leading-relaxed text-[15px] md:text-base relative z-10 font-medium tracking-wide">
+                凡购买本站任何商品必须遵守各个国家法律法规及各大平台规则，非法用途一切后果自负，本站不承担任何法律及连带责任！
+              </p>
+            </div>
           </div>
 
           <!-- Right: Summary & Purchase -->
@@ -260,7 +271,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ChevronRight, Bolt, FileText, AlertTriangle, ShoppingCart, Loader2, Check, Minus, Plus, MessageSquare, ChevronDown, ShieldCheck, Zap, Headset } from 'lucide-vue-next';
+import { ChevronRight, Bolt, FileText, AlertTriangle, ShoppingCart, Loader2, Check, Minus, Plus, MessageSquare, ChevronDown, ShieldCheck, Zap, Headset, ShieldAlert } from 'lucide-vue-next';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import { store } from '../store';
