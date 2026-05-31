@@ -131,7 +131,7 @@ export const authApi = {
 // Products API
 // ============================================================
 export const productsApi = {
-  list(params?: { page?: number; limit?: number; category_id?: number; search?: string }) {
+  list(params?: { page?: number; limit?: number; category_id?: number | string; search?: string }) {
     return api.get('/products', params as any);
   },
   featured(limit = 8) {
@@ -161,10 +161,10 @@ export const cartApi = {
   list() {
     return api.get('/cart');
   },
-  add(product_id: number) {
+  add(product_id: number | string) {
     return api.post('/cart', { product_id });
   },
-  remove(productId: number) {
+  remove(productId: number | string) {
     return api.delete(`/cart/${productId}`);
   },
   clear() {
@@ -182,7 +182,7 @@ export const ordersApi = {
   checkout() {
     return api.post('/orders');
   },
-  directBuy(product_id: number, quantity?: number, pkg_id?: number, dur_id?: number, type_idx?: number) {
+  directBuy(product_id: number | string, quantity?: number, pkg_id?: number, dur_id?: number, type_idx?: number) {
     return api.post('/orders/direct', { product_id, quantity, pkg_id, dur_id, type_idx });
   },
 };

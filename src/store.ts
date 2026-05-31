@@ -11,11 +11,11 @@ export interface UserSession {
 }
 
 export interface CartItemData {
-  id: number;
-  product_id: number;
+  id: string | number;
+  product_id: string | number;
   quantity: number;
   product: {
-    id: number;
+    id: string | number;
     name: string;
     price: number;
     currency: string;
@@ -160,7 +160,7 @@ const store = reactive({
     this.cartLoading = false;
   },
 
-  async addToCart(productId: number) {
+  async addToCart(productId: number | string) {
     if (!this.isLoggedIn) return { success: false, error: '请先登录' };
     try {
       const res = await cartApi.add(productId);
@@ -174,7 +174,7 @@ const store = reactive({
     }
   },
 
-  async removeFromCart(productId: number) {
+  async removeFromCart(productId: number | string) {
     try {
       const res = await cartApi.remove(productId);
       if (res.success) {
